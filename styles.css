@@ -1272,6 +1272,7 @@ tbody tr[data-reservation-room]:focus-visible {
   display: flex;
   align-items: center;
   gap: 4px;
+  justify-content: center;
 }
 
 .pagination-pages {
