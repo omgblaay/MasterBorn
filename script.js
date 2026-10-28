@@ -1473,20 +1473,7 @@ pageNext.addEventListener("click", () => {
     render();
   }
 });
-document
-  .querySelector("#print-table")
-  .addEventListener("click", () => window.print());
-document
-  .querySelector("#export-pdf")
-  .addEventListener("click", () => window.print());
-document
-  .querySelector("#export-excel")
-  .addEventListener("click", exportReservationsCsv);
-document.querySelector("#refresh-table").addEventListener("click", () => {
-  currentPage = 1;
-  render();
-  showToast("Lista rezerwacji została odświeżona");
-});
+
 document.querySelector("#calendar-prev").addEventListener("click", () => {
   calendarViewDate = new Date(
     calendarViewDate.getFullYear(),

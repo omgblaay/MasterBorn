@@ -88,6 +88,14 @@
             <p>ACME CORP HOTEL</p>
             <h1>Rezerwacje</h1>
           </div>
+
+          <button
+            class="primary-button"
+            style="align-self: flex-end"
+            data-open-reservation-page
+          >
+            + Nowa rezerwacja
+          </button>
         </section>
 
         <section
@@ -162,8 +170,19 @@
             </button>
           </div>
           <div class="filter-row">
+            <button
+              type="button"
+              class="table-action-button table-action-icon"
+              id="refresh-table"
+              aria-label="Odśwież listę"
+              title="Odśwież"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 11a8 8 0 1 0-2.34 5.66M20 4v7h-7" />
+              </svg>
+              <span class="sr-only">Odśwież</span>
+            </button>
             <label class="select-control"
-              ><span class="mini-icon">◉</span
               ><select id="status-filter">
                 <option value="all">Status pobytu</option>
                 <option value="Oczekujące">Oczekujące</option>
@@ -186,20 +205,15 @@
               ><input id="mine-only" type="checkbox" /><span></span> Pokaż wolne
               pokoje</label
             >
-          </div>
-          <!-- <div class="active-filters" id="active-filters">
-            <span>Pobyt:</span
-            ><button>25 paź 2026 <small>→</small> 28 paź 2026 <b>×</b></button
-            ><button class="clear-filters">Wyczyść filtry</button>
-          </div> -->
-        </section>
-
-        <section
-          class="table-card dashboard-view"
-          aria-label="Lista rezerwacji"
-        >
-          <div class="table-actionbar" aria-label="Akcje tabeli">
-            <div class="table-export-actions" style="width: 100%">
+            <div
+              style="
+                display: flex;
+                flex: 1;
+                gap: 8px;
+                align-items: center;
+                justify-content: end;
+              "
+            >
               <button
                 type="button"
                 class="table-action-button"
@@ -233,48 +247,33 @@
                 </svg>
                 PDF
               </button>
-              <div
-                style="
-                  display: flex;
-                  flex: 1;
-                  width: 100%;
-                  justify-content: flex-end;
-                  gap: 12px;
-                "
-              >
-                <button
-                  type="button"
-                  class="table-action-button table-action-icon"
-                  id="refresh-table"
-                  aria-label="Odśwież listę"
-                  title="Odśwież"
-                >
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M20 11a8 8 0 1 0-2.34 5.66M20 4v7h-7" />
-                  </svg>
-                  <span class="sr-only">Odśwież</span>
-                </button>
-                <button
-                  class="primary-button"
-                  style="align-self: flex-end"
-                  data-open-reservation-page
-                >
-                  + Nowa rezerwacja
-                </button>
-              </div>
             </div>
           </div>
+          <!-- <div class="active-filters" id="active-filters">
+            <span>Pobyt:</span
+            ><button>25 paź 2026 <small>→</small> 28 paź 2026 <b>×</b></button
+            ><button class="clear-filters">Wyczyść filtry</button>
+          </div> -->
+        </section>
+
+        <section
+          class="table-card dashboard-view"
+          aria-label="Lista rezerwacji"
+        >
           <div class="table-toolbar">
             <div>Lista rezerwacji</div>
-            <div
-              class="view-switch"
-              role="group"
-              aria-label="Gęstość widoku tabeli rezerwacji"
-            >
-              <button class="selected" data-table-view="compact">
-                Kompaktowy
-              </button>
-              <button data-table-view="full">Pełny</button>
+            <div style="display: flex; gap: 8px; align-items: center">
+              <small style="color: var(--color-text-tertiary)">Widok:</small>
+              <div
+                class="view-switch"
+                role="group"
+                aria-label="Gęstość widoku tabeli rezerwacji"
+              >
+                <button class="selected" data-table-view="compact">
+                  Kompaktowy
+                </button>
+                <button data-table-view="full">Pełny</button>
+              </div>
             </div>
           </div>
           <div class="table-scroll">
