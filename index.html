@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hotel Manager — Rezerwacje</title>
-    <link rel="stylesheet" href="styles.css?v=20261028-20" />
+    <link rel="stylesheet" href="styles.css?v=20261028-33" />
   </head>
   <body>
     <header class="topbar">
@@ -89,13 +89,57 @@
             <h1>Rezerwacje</h1>
           </div>
 
-          <button
-            class="primary-button"
-            style="align-self: flex-end"
-            data-open-reservation-page
-          >
-            + Nowa rezerwacja
-          </button>
+          <div class="page-heading-actions">
+            <button class="primary-button" data-open-reservation-page>
+              + Nowa rezerwacja
+            </button>
+            <div class="actions-menu-wrap">
+              <button
+                type="button"
+                class="overflow-action-button"
+                id="actions-menu-toggle"
+                aria-label="Więcej akcji"
+                aria-expanded="false"
+                aria-controls="actions-menu"
+              >
+                ⋯
+              </button>
+              <div id="actions-menu" class="actions-menu" hidden>
+                <button type="button" id="print-table">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M7 8V3h10v5M7 17H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M7 14h10v7H7z"
+                    />
+                  </svg>
+                  Drukuj
+                </button>
+                <span class="actions-menu-label">Pobierz</span>
+                <button type="button" id="export-excel">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13l5 6m0-6-5 6"
+                    />
+                  </svg>
+                  Excel
+                </button>
+                <button type="button" id="export-pdf">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 16h8M8 12h5"
+                    />
+                  </svg>
+                  PDF
+                </button>
+                <div class="actions-menu-separator"></div>
+                <button type="button" id="refresh-table">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M20 11a8 8 0 1 0-2.34 5.66M20 4v7h-7" />
+                  </svg>
+                  Odśwież listę
+                </button>
+              </div>
+            </div>
+          </div>
         </section>
 
         <section
@@ -163,97 +207,79 @@
                 type="search"
                 placeholder="Wyszukaj - gościa, pokój, status, nr rezerwacji itd."
             /></label>
-            <button class="date-button">
-              <img src="assets/date.svg" alt="" /><span
-                >25.12.2024 – 24.04.2026</span
-              ><img src="assets/chevron.svg" alt="" />
-            </button>
-          </div>
-          <div class="filter-row">
             <button
               type="button"
-              class="table-action-button table-action-icon"
-              id="refresh-table"
-              aria-label="Odśwież listę"
-              title="Odśwież"
+              class="filters-toggle"
+              id="filters-toggle"
+              aria-expanded="false"
+              aria-controls="filters-popover"
             >
               <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M20 11a8 8 0 1 0-2.34 5.66M20 4v7h-7" />
+                <path d="M4 6h16M7 12h10M10 18h4" />
               </svg>
-              <span class="sr-only">Odśwież</span>
+              Filtry
             </button>
-            <label class="select-control"
-              ><select id="status-filter">
-                <option value="all">Status pobytu</option>
-                <option value="Oczekujące">Oczekujące</option>
-                <option value="W hotelu">W hotelu</option>
-                <option value="Nie przyjechano">Nie przyjechano</option>
-                <option value="Anulowano">Anulowano</option>
-              </select></label
-            >
-            <button class="filter-pill">
-              <img src="assets/payment.svg" alt="" />Płatność&nbsp;
-              <strong>Gotówka</strong><span class="remove-payment">×</span>
-            </button>
-            <button class="filter-pill">
-              <img src="assets/globe.svg" alt="" />Źródło<img
-                src="assets/chevron.svg"
-                alt=""
-              />
-            </button>
-            <label class="checkbox-pill"
-              ><input id="mine-only" type="checkbox" /><span></span> Pokaż wolne
-              pokoje</label
-            >
-            <div
-              style="
-                display: flex;
-                flex: 1;
-                gap: 8px;
-                align-items: center;
-                justify-content: end;
-              "
-            >
+          </div>
+          <div
+            id="active-filters"
+            class="active-filters"
+            aria-label="Aktywne filtry"
+            hidden
+          ></div>
+          <div id="filters-popover" class="filters-popover" hidden>
+            <div class="filters-popover-head">
+              <strong>Filtry rezerwacji</strong>
               <button
                 type="button"
-                class="table-action-button"
-                id="print-table"
+                id="filters-close"
+                aria-label="Zamknij filtry"
               >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path
-                    d="M7 8V3h10v5M7 17H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M7 14h10v7H7z"
-                  />
-                </svg>
-                Drukuj
-              </button>
-              <span class="download-actions-label">Pobierz:</span>
-              <button
-                type="button"
-                class="table-action-button"
-                id="export-excel"
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path
-                    d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13l5 6m0-6-5 6"
-                  />
-                </svg>
-                Excel
-              </button>
-              <button type="button" class="table-action-button" id="export-pdf">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path
-                    d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 16h8M8 12h5"
-                  />
-                </svg>
-                PDF
+                ×
               </button>
             </div>
+            <div class="filters-popover-grid">
+              <label class="filter-field filter-field-wide">
+                <span>Termin pobytu</span>
+                <button type="button" class="date-button">
+                  <img src="assets/date.svg" alt="" /><span
+                    >25.12.2024 – 24.04.2026</span
+                  ><img src="assets/chevron.svg" alt="" />
+                </button>
+              </label>
+              <label class="filter-field">
+                <span>Status pobytu</span>
+                <select id="status-filter">
+                  <option value="all">Wszystkie statusy</option>
+                  <option value="Oczekujące">Oczekujące</option>
+                  <option value="W hotelu">W hotelu</option>
+                  <option value="Nie przyjechano">Nie przyjechano</option>
+                  <option value="Anulowano">Anulowano</option>
+                </select>
+              </label>
+              <label class="filter-field">
+                <span>Płatność</span>
+                <select id="payment-filter">
+                  <option value="all">Wszystkie metody</option>
+                  <option value="Karta">Karta</option>
+                  <option value="Gotówka">Gotówka</option>
+                  <option value="Przelew">Przelew</option>
+                </select>
+              </label>
+              <label class="filter-field">
+                <span>Źródło</span>
+                <select id="source-filter">
+                  <option value="all">Wszystkie źródła</option>
+                  <option value="Bezpośrednio">Bezpośrednio</option>
+                  <option value="Booking.com">Booking.com</option>
+                  <option value="Telefon">Telefon</option>
+                </select>
+              </label>
+              <label class="checkbox-pill filter-field-wide">
+                <input id="mine-only" type="checkbox" /><span></span> Pokaż
+                wolne pokoje
+              </label>
+            </div>
           </div>
-          <!-- <div class="active-filters" id="active-filters">
-            <span>Pobyt:</span
-            ><button>25 paź 2026 <small>→</small> 28 paź 2026 <b>×</b></button
-            ><button class="clear-filters">Wyczyść filtry</button>
-          </div> -->
         </section>
 
         <section
@@ -295,7 +321,7 @@
                 <tr>
                   <th>Pokój</th>
                   <th>Typ</th>
-                  <th>Gość / nr rezerwacji</th>
+                  <th>Gość</th>
                   <th>Status pobytu</th>
                   <th>Przyjazd</th>
                   <th class="stay-arrow-head" aria-label="Do"></th>
@@ -407,90 +433,59 @@
                   ></div>
                 </div>
 
-                <h2 class="field-wide">Pobyt</h2>
-                <label class="field date-field"
-                  >Data przyjazdu (od)
-                  <span class="date-input-shell">
-                    <span
-                      id="arrival-date-display"
-                      class="date-display"
-                      aria-hidden="true"
-                      >poniedziałek, 2.11.2026</span
-                    >
-                    <input
-                      name="arrival"
-                      type="date"
-                      value="2026-11-02"
-                      aria-label="Data przyjazdu"
-                      required
-                    />
-                  </span>
-                </label>
-                <label class="field date-field"
-                  >Data wyjazdu (do)
-                  <span class="date-input-shell">
-                    <span
-                      id="departure-date-display"
-                      class="date-display"
-                      aria-hidden="true"
-                      >czwartek, 5.11.2026</span
-                    >
-                    <input
-                      name="departure"
-                      type="date"
-                      value="2026-11-05"
-                      aria-label="Data wyjazdu"
-                      required
-                    />
-                  </span>
-                </label>
-                <div class="field room-field">
-                  <span class="field-label">Pokój</span>
-                  <input type="hidden" name="room" value="101" />
-                  <button
-                    type="button"
-                    class="room-card"
-                    data-open="room-picker"
-                  >
-                    <span class="room-card-icon"
-                      ><img src="assets/bed.svg" alt=""
-                    /></span>
-                    <span class="room-card-copy">
-                      <span class="room-card-top"
-                        ><strong id="selected-room-number">Pokój 101</strong
-                        ><span
-                          id="selected-room-status"
-                          class="room-state room-state-free"
-                          >Wolny</span
-                        ></span
-                      >
-                      <span id="selected-room-type" class="room-card-type"
-                        >Standard · 2 osoby · 1 łóżko podwójne</span
-                      >
-                      <span class="room-card-meta"
-                        ><span id="selected-room-floor">1. piętro</span
-                        ><strong id="selected-room-price"
-                          >500 zł / noc</strong
-                        ></span
-                      >
-                      <span
-                        id="selected-room-reserved"
-                        class="room-reservation-note"
-                        hidden
-                      ></span>
-                    </span>
-                    <span class="room-card-action"
-                      >Zmień <span aria-hidden="true">→</span></span
-                    >
-                  </button>
-                </div>
-                <label class="field"
+                <label class="field field-wide"
                   >Źródło<select name="source">
                     <option>Bezpośrednio</option>
                     <option>Booking.com</option>
                     <option>Telefon</option>
                   </select></label
                 >
+
+                <h2 class="field-wide">Pobyt</h2>
+                <div style="display: flex; flex-direction: row; gap: 16px">
+                  <label class="field date-field"
+                    >Data przyjazdu (od)
+                    <span class="date-input-shell">
+                      <span
+                        id="arrival-date-display"
+                        class="date-display"
+                        aria-hidden="true"
+                        >poniedziałek, 2.11.2026</span
+                      >
+                      <input
+                        name="arrival"
+                        type="date"
+                        value="2026-11-02"
+                        aria-label="Data przyjazdu"
+                        required
+                      />
+                    </span>
+                  </label>
+                  <label class="field date-field"
+                    >Data wyjazdu (do)
+                    <span class="date-input-shell">
+                      <span
+                        id="departure-date-display"
+                        class="date-display"
+                        aria-hidden="true"
+                        >czwartek, 5.11.2026</span
+                      >
+                      <input
+                        name="departure"
+                        type="date"
+                        value="2026-11-05"
+                        aria-label="Data wyjazdu"
+                        required
+                      />
+                    </span>
+                  </label>
+                </div>
+                <input
+                  class="room-value-input"
+                  type="hidden"
+                  name="room"
+                  value="101"
+                />
                 <h2 class="field-wide">Płatność</h2>
                 <label class="field"
                   >Status płatności<select name="paymentStatus" required>
@@ -591,7 +586,6 @@
                         name="total"
                         type="text"
                         value="1 500 zł"
-                        readonly
                     /></label>
                   </div>
                   <small id="price-formula" class="price-formula"
@@ -622,48 +616,123 @@
               </div>
             </form>
 
-            <aside
-              class="reservation-calendar-panel"
-              aria-label="Dostępność wybranego pokoju"
-            >
-              <div class="calendar-room-summary">
-                <span>Dostępność pokoju</span
-                ><strong id="calendar-room-title">Pokój 101</strong
-                ><small id="calendar-room-subtitle">Standard · 1. piętro</small>
-              </div>
-              <div class="calendar-head">
-                <button
-                  type="button"
-                  id="calendar-prev"
-                  aria-label="Poprzedni miesiąc"
-                >
-                  ‹</button
-                ><strong id="calendar-month">Listopad 2026</strong
-                ><button
-                  type="button"
-                  id="calendar-next"
-                  aria-label="Następny miesiąc"
-                >
-                  ›
-                </button>
-              </div>
-              <div class="calendar-weekdays" aria-hidden="true">
-                <span>Pon</span><span>Wt</span><span>Śr</span><span>Czw</span
-                ><span>Pt</span><span>Sob</span><span>Niedz</span>
-              </div>
-              <div id="calendar-days" class="calendar-days"></div>
-              <div class="calendar-legend">
-                <span><i class="legend-selected"></i>Wybrany pobyt</span
-                ><span><i class="legend-booked"></i>Zajęty termin</span>
-              </div>
-              <div class="future-bookings">
-                <div class="future-bookings-head">
-                  <strong>Przyszłe rezerwacje</strong
-                  ><span id="future-bookings-count">0</span>
+            <div class="reservation-side-column">
+              <aside
+                class="reservation-calendar-panel"
+                aria-label="Dostępność wybranego pokoju"
+              >
+                <div class="calendar-room-selector">
+                  <h2 class="smaller">Pokój</h3>
+                  <button
+                    type="button"
+                    class="room-card"
+                    data-open="room-picker"
+                  >
+                    <span class="room-card-icon"
+                      ><img src="assets/bed.svg" alt=""
+                    /></span>
+                    <span class="room-card-copy">
+                      <span class="room-card-top"
+                        ><strong id="selected-room-number">Pokój 101</strong
+                        ><span
+                          id="selected-room-status"
+                          class="room-state room-state-free"
+                          >Wolny</span
+                        ></span
+                      >
+                      <span id="selected-room-type" class="room-card-type"
+                        >Standard · 2 osoby · 1 łóżko podwójne</span
+                      >
+                      <span class="room-card-meta"
+                        ><span id="selected-room-floor">1. piętro</span
+                        ><strong id="selected-room-price"
+                          >500 zł / noc</strong
+                        ></span
+                      >
+                      <span
+                        id="selected-room-reserved"
+                        class="room-reservation-note"
+                        hidden
+                      ></span>
+                    </span>
+                    <!-- <span class="room-card-action"
+                      >Zmień <span aria-hidden="true">→</span></span
+                    > -->
+                  </button>
                 </div>
-                <div id="future-bookings-list"></div>
-              </div>
-            </aside>
+                <details class="calendar-accordion">
+                  <summary style="display:flex">
+                    <h3 class="smaller">Dostępność w terminie</h3>
+                    <span class="calendar-accordion-chevron" aria-hidden="true"
+                      >⌄</span
+                    >
+                  </summary>
+                  <div class="calendar-accordion-content">
+                    <div class="calendar-head">
+                      <button
+                        type="button"
+                        id="calendar-prev"
+                        aria-label="Poprzedni miesiąc"
+                      >
+                        ‹</button
+                      ><strong id="calendar-month">Listopad 2026</strong
+                      ><button
+                        type="button"
+                        id="calendar-next"
+                        aria-label="Następny miesiąc"
+                      >
+                        ›
+                      </button>
+                    </div>
+                    <div class="calendar-weekdays" aria-hidden="true">
+                      <span>Pon</span><span>Wt</span><span>Śr</span
+                      ><span>Czw</span><span>Pt</span><span>Sob</span
+                      ><span>Niedz</span>
+                    </div>
+                    <div id="calendar-days" class="calendar-days"></div>
+                    <div class="calendar-legend">
+                      <span><i class="legend-selected"></i>Wybrany pobyt</span
+                      ><span><i class="legend-booked"></i>Zajęty termin</span>
+                    </div>
+                    <div class="future-bookings">
+                      <div class="future-bookings-head">
+                        Przyszłe rezerwacje<span id="future-bookings-count"
+                          >0</span
+                        >
+                      </div>
+                      <div id="future-bookings-list"></div>
+                    </div>
+                  </div>
+                </details>
+              </aside>
+
+              <aside
+                class="reservation-price-panel"
+                aria-label="Podsumowanie ceny"
+              >
+                <h2 class="smaller">Podsumowanie ceny</h2>
+                <div class="price-receipt">
+                  <div class="price-receipt-row">
+                    <span id="receipt-stay-label">3 noce × 500 zł</span>
+                    <strong id="receipt-stay-total">1 500 zł</strong>
+                  </div>
+                  <div id="receipt-extras" class="price-receipt-extras"></div>
+                  <div
+                    id="receipt-discount"
+                    class="price-receipt-discount"
+                    hidden
+                  >
+                    <span id="receipt-discount-label">Rabat -0%</span>
+                    <strong id="receipt-discount-value">-0 zł</strong>
+                  </div>
+                  <div class="price-receipt-total">
+                    <span>Łącznie</span>
+                    <strong id="receipt-total">1 500 zł</strong>
+                  </div>
+                  <small>Cena obejmuje wybrany pokój i usługi dodatkowe.</small>
+                </div>
+              </aside>
+            </div>
           </div>
         </section>
       </main>
@@ -922,6 +991,6 @@
       >
     </div>
     <script src="assets/lottie-light.min.js"></script>
-    <script src="script.js?v=20261028-14"></script>
+    <script src="script.js?v=20261028-22"></script>
   </body>
 </html>

@@ -631,7 +631,10 @@ const body = document.querySelector("#reservation-body");
 const resultCount = document.querySelector("#result-count");
 const search = document.querySelector("#search");
 const statusFilter = document.querySelector("#status-filter");
+const paymentFilter = document.querySelector("#payment-filter");
+const sourceFilter = document.querySelector("#source-filter");
 const freeOnly = document.querySelector("#mine-only");
+const activeFilters = document.querySelector("#active-filters");
 const roomSearch = document.querySelector("#room-search");
 const roomList = document.querySelector("#room-list");
 const roomResultCount = document.querySelector("#room-result-count");
@@ -658,6 +661,8 @@ let archiveOnly = false;
 let currentPage = 1;
 let pageSize = 10;
 let calendarViewDate = new Date(2026, 10, 1);
+let manualReservationTotal = null;
+let latestPricingBreakdown = null;
 
 function updateHotelStats() {
   const freeRooms = rooms.filter((room) => room.state === "free");
@@ -777,10 +782,6 @@ function renderReservationCalendar() {
   const bookings = roomBookings[room.number] || [];
   const year = calendarViewDate.getFullYear();
   const month = calendarViewDate.getMonth();
-  document.querySelector("#calendar-room-title").textContent =
-    `Pokój ${room.number}`;
-  document.querySelector("#calendar-room-subtitle").textContent =
-    `${room.type} · ${room.floor}`;
   document.querySelector("#calendar-month").textContent =
     new Intl.DateTimeFormat("pl-PL", { month: "long", year: "numeric" }).format(
       calendarViewDate,
@@ -896,6 +897,24 @@ function populateReservationForm(reservation) {
   document.querySelector("#reservation-total").value = reservation.total;
   document.querySelector("#nightly-rate").value = reservation.price;
   document.querySelector("#night-count").value = reservation.nights;
+  const editNights = Number(reservation.nights) || 0;
+  const editNightlyRate = parsePrice(reservation.price);
+  const editRoomTotal = editNights * editNightlyRate;
+  const editTotal = parsePrice(reservation.total);
+  manualReservationTotal = null;
+  latestPricingBreakdown = {
+    nights: editNights,
+    nightlyRate: editNightlyRate,
+    roomTotal: editRoomTotal,
+    extraItems: (reservation.extras || []).map((label) => ({
+      label,
+      detail: "Wybrana usługa",
+      total: null,
+    })),
+    total: editTotal,
+    automaticTotal: editTotal,
+  };
+  renderPriceReceipt(latestPricingBreakdown);
 }
 
 function openReservationPage() {
@@ -922,6 +941,39 @@ function closeReservationPage() {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+function renderPriceReceipt({
+  nights,
+  nightlyRate,
+  roomTotal,
+  extraItems,
+  total,
+  automaticTotal = total,
+}) {
+  const nightLabel =
+    nights === 1 ? "noc" : nights > 1 && nights < 5 ? "noce" : "nocy";
+  document.querySelector("#receipt-stay-label").textContent =
+    `${nights} ${nightLabel} × ${formatPrice(nightlyRate)}`;
+  document.querySelector("#receipt-stay-total").textContent =
+    formatPrice(roomTotal);
+  document.querySelector("#receipt-extras").innerHTML = extraItems
+    .map(
+      (item) =>
+        `<div><span><b>${item.label}</b>${item.detail ? `<small>${item.detail}</small>` : ""}</span><strong>${Number.isFinite(item.total) ? formatPrice(item.total) : "Wybrano"}</strong></div>`,
+    )
+    .join("");
+  const discount = Math.max(0, automaticTotal - total);
+  const discountPercent = automaticTotal
+    ? (discount / automaticTotal) * 100
+    : 0;
+  const discountRow = document.querySelector("#receipt-discount");
+  discountRow.hidden = discount <= 0;
+  document.querySelector("#receipt-discount-label").textContent =
+    `Rabat -${new Intl.NumberFormat("pl-PL", { maximumFractionDigits: 1 }).format(discountPercent)}%`;
+  document.querySelector("#receipt-discount-value").textContent =
+    `-${formatPrice(discount)}`;
+  document.querySelector("#receipt-total").textContent = formatPrice(total);
+}
+
 function calculateReservationTotal() {
   const form = document.querySelector("#reservation-form");
   const arrival = new Date(`${form.elements.arrival.value}T00:00:00`);
@@ -933,22 +985,64 @@ function calculateReservationTotal() {
   const nightlyRate = parsePrice(room.price);
   const guests = 1 + form.querySelectorAll(".additional-guest").length;
   let extrasTotal = 0;
+  const extraItems = [];
   form.querySelectorAll('[name="extras"]:checked').forEach((extra) => {
     const price = Number(extra.dataset.price);
+    let extraTotal = 0;
+    let detail = `${formatPrice(price)} jednorazowo`;
     if (extra.dataset.mode === "person-night")
-      extrasTotal += price * guests * nights;
-    if (extra.dataset.mode === "night") extrasTotal += price * nights;
-    if (extra.dataset.mode === "flat") extrasTotal += price;
+      extraTotal = price * guests * nights;
+    if (extra.dataset.mode === "person-night")
+      detail = `${formatPrice(price)} × ${guests} os. × ${nights} ${nights === 1 ? "noc" : "nocy"}`;
+    if (extra.dataset.mode === "night") {
+      extraTotal = price * nights;
+      detail = `${formatPrice(price)} × ${nights} ${nights === 1 ? "noc" : "nocy"}`;
+    }
+    if (extra.dataset.mode === "flat") extraTotal = price;
+    extrasTotal += extraTotal;
+    extraItems.push({ label: extra.value, detail, total: extraTotal });
   });
   const roomTotal = nightlyRate * nights;
+  const automaticTotal = roomTotal + extrasTotal;
+  manualReservationTotal = null;
+  latestPricingBreakdown = {
+    nights,
+    nightlyRate,
+    roomTotal,
+    extraItems,
+    total: automaticTotal,
+    automaticTotal,
+  };
   document.querySelector("#night-count").value = nights;
   document.querySelector("#nightly-rate").value = formatPrice(nightlyRate);
-  document.querySelector("#reservation-total").value = formatPrice(
-    roomTotal + extrasTotal,
-  );
+  document.querySelector("#reservation-total").value =
+    formatPrice(automaticTotal);
   document.querySelector("#price-formula").textContent =
     `${nights} ${nights === 1 ? "noc" : nights > 1 && nights < 5 ? "noce" : "nocy"} × ${formatPrice(nightlyRate)}${extrasTotal ? ` + dodatki ${formatPrice(extrasTotal)}` : ""}`;
+  renderPriceReceipt(latestPricingBreakdown);
 }
+
+const reservationTotalInput = document.querySelector("#reservation-total");
+
+reservationTotalInput.addEventListener("change", () => {
+  if (!latestPricingBreakdown) return;
+  const rawValue = reservationTotalInput.value.trim();
+  if (!rawValue) {
+    manualReservationTotal = null;
+    reservationTotalInput.value = formatPrice(
+      latestPricingBreakdown.automaticTotal,
+    );
+    renderPriceReceipt(latestPricingBreakdown);
+    return;
+  }
+
+  manualReservationTotal = Math.max(0, parsePrice(rawValue));
+  reservationTotalInput.value = formatPrice(manualReservationTotal);
+  renderPriceReceipt({
+    ...latestPricingBreakdown,
+    total: manualReservationTotal,
+  });
+});
 
 const additionalGuests = document.querySelector("#additional-guests");
 const additionalGuestsCount = document.querySelector(
@@ -1036,19 +1130,15 @@ function roomOptionTemplate(room) {
   return `<article class="room-option${selected ? " is-selected" : ""}${selectable ? "" : " is-unavailable"}">
     <div class="room-option-main">
       <div class="room-option-heading">
-        <span class="room-option-number">${room.number}</span>
-        <div>
-          <strong>${room.type}</strong>
+        <div style="display: flex; flex-direction:row; align-items:center; gap: 10px;">
+        <p class="room-option-number" style="margin:0">${room.number}</p>·
+          <strong>${room.type}</strong>·
           <span>${room.capacity} · ${details.area} m² · ${room.floor}</span>
         </div>
       </div>
       <div class="room-option-sleep">${room.beds}<span>Łazienka prywatna · pokój na wyłączność</span></div>
       <div class="room-option-amenities">${amenityTags}</div>
-      <div class="room-option-benefits">
-        ${details.amenities.includes("Wi‑Fi") ? "<span>✓ Bezpłatne Wi‑Fi</span>" : ""}
-        ${selectable ? "<span>✓ Bezpłatne anulowanie</span><span>✓ Płatność przy zameldowaniu</span>" : '<span class="is-muted">Pokój obecnie niedostępny</span>'}
-      </div>
-      ${room.reservedFrom ? `<div class="room-reservation-note">Dostępny teraz · kolejna rezerwacja od ${room.reservedFrom}</div>` : ""}
+
     </div>
     <aside class="room-option-booking">
       <div class="room-option-price"><strong>${room.price}</strong><span>za noc</span></div>
@@ -1218,7 +1308,8 @@ function rowTemplate(item) {
     : "";
   return `<tr data-reservation-room="${item.room}" tabindex="0" aria-label="Otwórz szczegóły rezerwacji dla pokoju ${item.room}">
     <td><span>${item.room}</span>${room ? `<small class="reservation-extra">${room.floor}</small>` : ""}</td><td>${item.type}${details ? `<small class="reservation-extra">${details.area} m²</small>` : ""}</td>
-    <td class="guest-cell"><div class="guest-main-line"><strong>${item.guest}</strong>${item.id ? `<span class="reservation-id">${item.id}</span>` : ""}${guestCountBadge}</div>${item.note ? `<span class="guest-note">${item.note}</span>` : ""}${guestNamesExpanded}${room && details ? `<div class="reservation-room-expanded"><strong>${room.beds}</strong><span class="reservation-amenities">${amenities}</span></div>` : ""}</td>
+    <td class="guest-cell">
+    <div class="guest-main-line"><strong>${item.guest}</strong>${item.id ? `<span class="reservation-id">${item.id}</span>` : ""}${guestCountBadge}</div>${item.note ? `<div class="guest-note">${item.note}</div>` : ""}${guestNamesExpanded}${room && details ? `<div class="reservation-room-expanded"><strong>${room.beds}</strong><span class="reservation-amenities">${amenities}</span></div>` : ""}</td>
     <td>${statusBadge(item.status)}</td>
     <td class="date-cell">${item.arrival}${item.arrivalNote ? `<small>${item.arrivalNote}</small>` : ""}</td>
     <td class="stay-arrow-cell" aria-hidden="true">→</td>
@@ -1232,6 +1323,8 @@ function rowTemplate(item) {
 function getFilteredReservations() {
   const query = search.value.trim().toLocaleLowerCase("pl");
   const status = statusFilter.value;
+  const payment = paymentFilter.value;
+  const source = sourceFilter.value;
   return reservations.filter((item) => {
     const haystack =
       `${item.room} ${item.type} ${item.guest} ${item.id} ${item.status} ${item.note}`.toLocaleLowerCase(
@@ -1252,7 +1345,15 @@ function getFilteredReservations() {
         (freeOnly.checked && isFreeRoom);
     const matchesStatus =
       isFreeRoom || status === "all" || item.status === status;
-    return haystack.includes(query) && matchesTableScope && matchesStatus;
+    const matchesPayment =
+      isFreeRoom || payment === "all" || item.payment === payment;
+    const matchesSource =
+      isFreeRoom || source === "all" || (item.source || "Bezpośrednio") === source;
+    return haystack.includes(query)
+      && matchesTableScope
+      && matchesStatus
+      && matchesPayment
+      && matchesSource;
   });
 }
 
@@ -1270,6 +1371,42 @@ function renderPagination(totalResults) {
   }).join("");
 }
 
+function renderActiveFilters() {
+  const filters = [
+    statusFilter.value !== "all" && {
+      key: "status",
+      label: `Status: ${statusFilter.selectedOptions[0].textContent}`,
+    },
+    paymentFilter.value !== "all" && {
+      key: "payment",
+      label: `Płatność: ${paymentFilter.selectedOptions[0].textContent}`,
+    },
+    sourceFilter.value !== "all" && {
+      key: "source",
+      label: `Źródło: ${sourceFilter.selectedOptions[0].textContent}`,
+    },
+    freeOnly.checked && {
+      key: "free",
+      label: "Wolne pokoje",
+    },
+  ].filter(Boolean);
+
+  activeFilters.hidden = filters.length === 0;
+  activeFilters.innerHTML = filters
+    .map(
+      ({ key, label }) => `
+        <span class="filter-pill">
+          <span>${label}</span>
+          <button
+            type="button"
+            data-remove-filter="${key}"
+            aria-label="Usuń filtr: ${label}"
+          >×</button>
+        </span>`,
+    )
+    .join("");
+}
+
 function render() {
   const filtered = getFilteredReservations();
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
@@ -1282,6 +1419,7 @@ function render() {
   tableCard.classList.toggle("table-full", reservationView === "full");
   resultCount.textContent = `${filtered.length} ${filtered.length === 1 ? "wynik" : filtered.length > 1 && filtered.length < 5 ? "wyniki" : "wyników"}`;
   renderPagination(filtered.length);
+  renderActiveFilters();
 }
 
 function showToast(message) {
@@ -1348,6 +1486,14 @@ statusFilter.addEventListener("change", () => {
   selectStatCard("");
   render();
 });
+[paymentFilter, sourceFilter].forEach((control) =>
+  control.addEventListener("change", () => {
+    statOnlyFree = false;
+    currentPage = 1;
+    selectStatCard("");
+    render();
+  }),
+);
 freeOnly.addEventListener("change", () => {
   statOnlyFree = false;
   if (archiveOnly && freeOnly.checked) {
@@ -1358,6 +1504,61 @@ freeOnly.addEventListener("change", () => {
   }
   selectStatCard("");
   render();
+});
+
+activeFilters.addEventListener("click", (event) => {
+  const removeButton = event.target.closest("[data-remove-filter]");
+  if (!removeButton) return;
+
+  const filter = removeButton.dataset.removeFilter;
+  if (filter === "status") statusFilter.value = "all";
+  if (filter === "payment") paymentFilter.value = "all";
+  if (filter === "source") sourceFilter.value = "all";
+  if (filter === "free") freeOnly.checked = false;
+
+  statOnlyFree = false;
+  currentPage = 1;
+  selectStatCard("");
+  render();
+});
+
+const filtersToggle = document.querySelector("#filters-toggle");
+const filtersPopover = document.querySelector("#filters-popover");
+const actionsMenuToggle = document.querySelector("#actions-menu-toggle");
+const actionsMenu = document.querySelector("#actions-menu");
+
+function setPopoverState(trigger, panel, open) {
+  panel.hidden = !open;
+  trigger.setAttribute("aria-expanded", String(open));
+}
+
+filtersToggle.addEventListener("click", () => {
+  const open = filtersPopover.hidden;
+  setPopoverState(filtersToggle, filtersPopover, open);
+  setPopoverState(actionsMenuToggle, actionsMenu, false);
+});
+document.querySelector("#filters-close").addEventListener("click", () =>
+  setPopoverState(filtersToggle, filtersPopover, false),
+);
+actionsMenuToggle.addEventListener("click", () => {
+  const open = actionsMenu.hidden;
+  setPopoverState(actionsMenuToggle, actionsMenu, open);
+  setPopoverState(filtersToggle, filtersPopover, false);
+});
+actionsMenu.addEventListener("click", (event) => {
+  if (event.target.closest("button"))
+    setPopoverState(actionsMenuToggle, actionsMenu, false);
+});
+document.addEventListener("click", (event) => {
+  if (!filtersPopover.contains(event.target) && !filtersToggle.contains(event.target))
+    setPopoverState(filtersToggle, filtersPopover, false);
+  if (!actionsMenu.contains(event.target) && !actionsMenuToggle.contains(event.target))
+    setPopoverState(actionsMenuToggle, actionsMenu, false);
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape") return;
+  setPopoverState(filtersToggle, filtersPopover, false);
+  setPopoverState(actionsMenuToggle, actionsMenu, false);
 });
 document
   .querySelectorAll("[data-stat-filter]")
@@ -1495,30 +1696,6 @@ roomList.addEventListener("click", (event) => {
   if (!option || option.disabled) return;
   setSelectedRoom(option.dataset.roomNumber);
   document.querySelector("#room-picker").close("selected");
-});
-
-document
-  .querySelector(".remove-payment")
-  ?.addEventListener("click", (event) =>
-    event.currentTarget.closest(".filter-pill").remove(),
-  );
-document
-  .querySelector(".active-filters button b")
-  ?.addEventListener("click", (event) =>
-    event.currentTarget.closest("button").remove(),
-  );
-document.querySelector(".clear-filters")?.addEventListener("click", () => {
-  search.value = "";
-  statusFilter.value = "all";
-  freeOnly.checked = false;
-  reservationPeriod = "current";
-  archiveOnly = false;
-  statOnlyFree = false;
-  syncPeriodFilterButtons();
-  syncSidebarSection("current");
-  selectStatCard("");
-  document.querySelector("#active-filters").style.display = "none";
-  render();
 });
 
 document
