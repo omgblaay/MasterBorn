@@ -71,13 +71,13 @@ Ten prompt ustalił trzy ograniczenia: zgodność z kierunkiem wizualnym z Figmy
 
 ### Tablica sticky notes
 
-| Obserwacje | Pytania projektowe | Decyzje | Walidacja |
-|---|---|---|---|
-| Rezerwacje i pokoje są pomieszane. | Co recepcjonista musi zobaczyć w 3 sekundy? | Tabela pokazuje rezerwacje; wolne pokoje są opcjonalne. | Czy bez liczenia wierszy widać obłożenie? |
-| Status pobytu jest ukryty w nazwisku lub notatce. | Czy status jest jednoznaczny bez interpretacji? | Jawne statusy pobytu i płatności. | Czy „wyjazd” i „do 14:00” nadal są mylone? |
-| Brakuje pewności dostępności przez cały termin. | Jak pokazać konflikt z przyszłą rezerwacją? | Kalendarz i przyszłe rezerwacje przy wybranym pokoju. | Czy użytkownik może wybrać zajęty pokój? |
-| Tabela jest zbyt szeroka i ciężka. | Które dane są potrzebne zawsze? | Widok kompaktowy i pełny. | Czy ważne dane nie znikają w kompaktowym widoku? |
-| Filtry zajmują dużo miejsca. | Jak zachować widoczność aktywnego stanu? | Panel „Filtry” + pille pod wyszukiwarką. | Czy każdy filtr można usunąć jednym kliknięciem? |
+| Obserwacje                                        | Pytania projektowe                              | Decyzje                                                 | Walidacja                                        |
+| ------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------ |
+| Rezerwacje i pokoje są pomieszane.                | Co recepcjonista musi zobaczyć w 3 sekundy?     | Tabela pokazuje rezerwacje; wolne pokoje są opcjonalne. | Czy bez liczenia wierszy widać obłożenie?        |
+| Status pobytu jest ukryty w nazwisku lub notatce. | Czy status jest jednoznaczny bez interpretacji? | Jawne statusy pobytu i płatności.                       | Czy „wyjazd” i „do 14:00” nadal są mylone?       |
+| Brakuje pewności dostępności przez cały termin.   | Jak pokazać konflikt z przyszłą rezerwacją?     | Kalendarz i przyszłe rezerwacje przy wybranym pokoju.   | Czy użytkownik może wybrać zajęty pokój?         |
+| Tabela jest zbyt szeroka i ciężka.                | Które dane są potrzebne zawsze?                 | Widok kompaktowy i pełny.                               | Czy ważne dane nie znikają w kompaktowym widoku? |
+| Filtry zajmują dużo miejsca.                      | Jak zachować widoczność aktywnego stanu?        | Panel „Filtry” + pille pod wyszukiwarką.                | Czy każdy filtr można usunąć jednym kliknięciem? |
 
 ### Materiały, które warto pokazać podczas prezentacji
 
@@ -104,4 +104,3 @@ Ten prompt ustalił trzy ograniczenia: zgodność z kierunkiem wizualnym z Figmy
 - [ ] Pokazać porównanie „przed / po”.
 - [ ] Zaznaczyć, które elementy są prototypem bez backendu.
 - [ ] Zakończyć jednym wnioskiem i jednym następnym krokiem.
-
