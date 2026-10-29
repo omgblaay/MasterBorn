@@ -1,14 +1,9 @@
 # Hotel Manager — reservations view
 
+## Krystian Blaszczyk x MasterBorn
+
 Static implementation of the supplied Figma reservations screen. It uses plain HTML, CSS, and JavaScript with no build step or backend.
 
-## Run locally
-
-```bash
-python3 -m http.server 4173
-```
-
-Then open `http://localhost:4173`.
 
 ## Included interactions
 
