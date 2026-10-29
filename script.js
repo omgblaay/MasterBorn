@@ -876,6 +876,7 @@ let successAnimation;
 let statOnlyFree = false;
 let currentDetailsReservation = null;
 let editingReservation = null;
+let checkInMode = false;
 let archiveOnly = false;
 let currentPage = 1;
 let pageSize = 10;
@@ -1281,12 +1282,14 @@ function isoToReservationDate(value) {
 
 function setReservationFormMode(reservation = null) {
   editingReservation = reservation;
+  document.querySelector("#check-in-reservation").hidden = !checkInMode;
   document.querySelector("#reservation-page-title").textContent = reservation
     ? "Edytuj rezerwację"
     : "Dodaj rezerwację";
-  document.querySelector("#reservation-submit").textContent = reservation
-    ? "Zapisz zmiany"
-    : "Dodaj rezerwację";
+  const submitButton = document.querySelector("#reservation-submit");
+  submitButton.textContent = reservation ? "Zapisz zmiany" : "Dodaj rezerwację";
+  submitButton.classList.toggle("secondary-button", Boolean(reservation));
+  submitButton.classList.toggle("primary-button", !reservation);
 }
 
 function prepareNewReservation(roomNumber = "101") {
@@ -1296,6 +1299,7 @@ function prepareNewReservation(roomNumber = "101") {
   syncBreakfastConfig();
   resetAdditionalGuests();
   setReservationFormMode(null);
+  checkInMode = false;
   setSelectedRoom(roomNumber);
   updateDateDisplays();
   calculateReservationTotal();
@@ -1407,6 +1411,7 @@ function closeReservationPage() {
   setStayRangePopover(false);
   reservationPage.hidden = true;
   editingReservation = null;
+  checkInMode = false;
   dashboardViews.forEach((view) => {
     view.hidden = false;
   });
@@ -2773,8 +2778,9 @@ document
   .addEventListener("click", closeReservationPage);
 document.querySelector("#details-edit-toggle").addEventListener("click", () => {
   if (!currentDetailsReservation) return;
-  document.querySelector("#details-modal").close();
+  checkInMode = false;
   populateReservationForm(currentDetailsReservation);
+  document.querySelector("#details-modal").close();
   openReservationPage();
 });
 document
@@ -2829,6 +2835,12 @@ body.addEventListener("click", (event) => {
     );
     if (actionButton.dataset.action === "Zarezerwuj") {
       prepareNewReservation(reservation.room);
+      openReservationPage();
+      return;
+    }
+    if (actionButton.dataset.action === "Zamelduj") {
+      checkInMode = true;
+      populateReservationForm(reservation);
       openReservationPage();
       return;
     }

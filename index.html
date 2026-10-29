@@ -980,6 +980,13 @@
                 >
                   Anuluj</button
                 ><button
+                  type="button"
+                  class="secondary-button"
+                  id="check-in-reservation"
+                  hidden
+                >
+                  Zamelduj</button
+                ><button
                   id="reservation-submit"
                   class="primary-button"
                   type="submit"
@@ -1123,20 +1130,50 @@
         <div class="modal-head">
           <div>
             <h2 id="details-modal-title">Szczegóły rezerwacji</h2>
-            <div
-              id="details-current-status"
-              class="details-current-status"
-            ></div>
           </div>
-          <button
-            type="submit"
-            class="modal-close"
-            form="close-details-modal"
-            value="cancel"
-            aria-label="Zamknij"
-          >
-            ×
-          </button>
+          <div class="details-header-actions">
+            <button type="button" class="details-utility-button" title="Drukuj">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M7 8V3h10v5M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M7 14h10v7H7z"
+                />
+              </svg>
+              Drukuj
+            </button>
+            <button
+              type="button"
+              class="details-utility-button"
+              title="Pobierz Excel"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M5 3h9l5 5v13H5zM14 3v6h5M8 13l4 5m0-5-4 5m7-5v5m0-5h2m-2 2.5h2"
+                />
+              </svg>
+              Excel
+            </button>
+            <button
+              type="button"
+              class="details-utility-button"
+              title="Pobierz PDF"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M5 3h9l5 5v13H5zM14 3v6h5M8 15h2a1.5 1.5 0 0 0 0-3H8v6m6 0v-6h1a3 3 0 0 1 0 6h-1m5 0v-6h3m-3 3h2"
+                />
+              </svg>
+              PDF
+            </button>
+            <button
+              type="submit"
+              class="modal-close"
+              form="close-details-modal"
+              value="cancel"
+              aria-label="Zamknij"
+            >
+              ×
+            </button>
+          </div>
         </div>
 
         <div id="details-read-view">
@@ -1199,6 +1236,14 @@
             <h3>Pobyt</h3>
             <div class="details-summary">
               <div>
+                <span>Status rezerwacji</span>
+                <strong
+                  id="details-current-status"
+                  class="details-current-status"
+                  >—</strong
+                >
+              </div>
+              <div>
                 <span>Numer rezerwacji</span><strong id="details-id">—</strong>
               </div>
               <div>
@@ -1245,11 +1290,11 @@
         <div class="modal-actions">
           <button
             type="submit"
-            class="secondary-button"
+            class="danger-button"
             form="close-details-modal"
             value="cancel"
           >
-            Zamknij
+            Anuluj rezerwację
           </button>
           <button type="button" id="details-edit-toggle" class="primary-button">
             Edytuj rezerwację
