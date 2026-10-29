@@ -4,9 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hotel Manager — Rezerwacje</title>
-    <link rel="stylesheet" href="styles.css?v=20261029-45" />
+    <link rel="stylesheet" href="styles.css?v=20261029-51" />
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Przejdź do głównej treści</a>
     <header class="topbar">
       <a class="brand" href="#" aria-label="Hotel Manager — strona główna">
         <span class="brand-mark"><span>HMP</span></span>
@@ -17,7 +18,7 @@
       </a>
       <div class="today">
         <span>Dzisiaj jest</span><img src="assets/calendar.svg" alt="" /><strong
-          >Wtorek, 2. listopada 2026</strong
+          ><span class="today-weekday">Wtorek, </span>2. listopada 2026</strong
         >
       </div>
       <div class="account-actions">
@@ -85,7 +86,7 @@
         </div>
       </aside>
 
-      <main class="main-content">
+      <main class="main-content" id="main-content" tabindex="-1">
         <section class="page-heading dashboard-view">
           <div>
             <p>ACME CORP HOTEL</p>
@@ -94,7 +95,8 @@
 
           <div class="page-heading-actions">
             <button class="primary-button" data-open-reservation-page>
-              + Nowa rezerwacja
+              <span class="primary-button-symbol" aria-hidden="true">+</span>
+              Nowa rezerwacja
             </button>
             <div class="actions-menu-wrap">
               <button
@@ -104,11 +106,18 @@
                 aria-label="Więcej akcji"
                 aria-expanded="false"
                 aria-controls="actions-menu"
+                aria-haspopup="menu"
               >
                 ⋯
               </button>
-              <div id="actions-menu" class="actions-menu" hidden>
-                <button type="button" id="print-table">
+              <div
+                id="actions-menu"
+                class="actions-menu"
+                role="menu"
+                aria-label="Akcje tabeli rezerwacji"
+                hidden
+              >
+                <button type="button" id="print-table" role="menuitem">
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path
                       d="M7 8V3h10v5M7 17H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M7 14h10v7H7z"
@@ -116,8 +125,10 @@
                   </svg>
                   Drukuj
                 </button>
-                <span class="actions-menu-label">Pobierz</span>
-                <button type="button" id="export-excel">
+                <span class="actions-menu-label" role="presentation"
+                  >Pobierz</span
+                >
+                <button type="button" id="export-excel" role="menuitem">
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path
                       d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13l5 6m0-6-5 6"
@@ -125,7 +136,7 @@
                   </svg>
                   Excel
                 </button>
-                <button type="button" id="export-pdf">
+                <button type="button" id="export-pdf" role="menuitem">
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path
                       d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 16h8M8 12h5"
@@ -133,8 +144,8 @@
                   </svg>
                   PDF
                 </button>
-                <div class="actions-menu-separator"></div>
-                <button type="button" id="refresh-table">
+                <div class="actions-menu-separator" role="separator"></div>
+                <button type="button" id="refresh-table" role="menuitem">
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M20 11a8 8 0 1 0-2.34 5.66M20 4v7h-7" />
                   </svg>
@@ -184,7 +195,9 @@
             <div class="stat-copy">
               <span>Pokoje łącznie</span
               ><strong id="stat-total-rooms">14</strong
-              ><small id="stat-room-breakdown">6 wolnych · 3 poza sprzedażą</small>
+              ><small id="stat-room-breakdown"
+                >6 wolnych · 3 poza sprzedażą</small
+              >
             </div>
           </button>
           <button
@@ -205,6 +218,7 @@
         <section class="filters dashboard-view" aria-label="Filtry rezerwacji">
           <div class="filter-topline">
             <label class="search-field"
+              ><span class="sr-only">Wyszukaj rezerwację</span
               ><img src="assets/search.svg" alt="" /><input
                 id="search"
                 type="search"
@@ -271,100 +285,124 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div id="list-date-range-filter" class="list-date-range-filter" hidden>
-            <span class="field-label">Termin pobytu</span>
-            <div class="stay-range-picker list-stay-range-picker">
-              <button
-                type="button"
-                id="list-range-toggle"
-                class="stay-range-toggle"
-                aria-expanded="false"
-                aria-controls="list-range-popover"
-              >
-                <img src="assets/calendar.svg" alt="" />
-                <span class="stay-range-values">
-                  <span class="stay-range-value">
-                    <small>Data przyjazdu</small>
-                    <strong id="list-range-start-display">Wybierz datę</strong>
-                  </span>
-                  <span class="stay-range-separator" aria-hidden="true">–</span>
-                  <span class="stay-range-value">
-                    <small>Data wyjazdu</small>
-                    <strong id="list-range-end-display">Wybierz datę</strong>
-                  </span>
-                </span>
-                <span class="stay-range-chevron" aria-hidden="true">⌄</span>
-              </button>
-              <div
-                id="list-range-popover"
-                class="stay-range-popover"
-                role="dialog"
-                aria-label="Filtruj rezerwacje według terminu pobytu"
-                hidden
-              >
-                <div class="stay-range-head">
-                  <button
-                    type="button"
-                    id="list-range-prev"
-                    aria-label="Poprzedni miesiąc"
-                  >
-                    ‹
-                  </button>
-                  <div class="stay-range-month-titles">
-                    <strong id="list-range-month-primary">Październik 2026</strong>
-                    <strong id="list-range-month-secondary">Listopad 2026</strong>
-                  </div>
-                  <button
-                    type="button"
-                    id="list-range-next"
-                    aria-label="Następny miesiąc"
-                  >
-                    ›
-                  </button>
-                </div>
-                <div class="stay-range-calendars">
-                  <section class="stay-range-calendar">
-                    <div class="stay-range-weekdays" aria-hidden="true">
-                      <span>Pn</span><span>Wt</span><span>Śr</span
-                      ><span>Cz</span><span>Pt</span><span>So</span
-                      ><span>Nd</span>
-                    </div>
-                    <div
-                      id="list-range-days-primary"
-                      class="stay-range-days"
-                    ></div>
-                  </section>
-                  <section class="stay-range-calendar">
-                    <div class="stay-range-weekdays" aria-hidden="true">
-                      <span>Pn</span><span>Wt</span><span>Śr</span
-                      ><span>Cz</span><span>Pt</span><span>So</span
-                      ><span>Nd</span>
-                    </div>
-                    <div
-                      id="list-range-days-secondary"
-                      class="stay-range-days"
-                    ></div>
-                  </section>
-                </div>
-                <p id="list-range-hint" class="stay-range-hint">
-                  Wybierz datę przyjazdu
-                </p>
-                <div
-                  class="stay-range-flexibility"
-                  aria-label="Elastyczność terminu"
+            <div
+              id="list-date-range-filter"
+              class="list-date-range-filter"
+              hidden
+            >
+              <div class="stay-range-picker list-stay-range-picker">
+                <button
+                  type="button"
+                  id="list-range-toggle"
+                  class="stay-range-toggle"
+                  aria-expanded="false"
+                  aria-controls="list-range-popover"
                 >
-                  <button type="button" class="selected" data-list-flex-days="0">
-                    Dokładny termin
-                  </button>
-                  <button type="button" data-list-flex-days="1">± 1 dzień</button>
-                  <button type="button" data-list-flex-days="2">± 2 dni</button>
-                  <button type="button" data-list-flex-days="3">± 3 dni</button>
-                  <button type="button" data-list-flex-days="7">± 7 dni</button>
+                  <img src="assets/calendar.svg" alt="" />
+                  <span class="stay-range-values">
+                    <span class="stay-range-value">
+                      <strong id="list-range-start-display">Przyjazd</strong>
+                    </span>
+                    <span class="stay-range-separator" aria-hidden="true"
+                      >–</span
+                    >
+                    <span class="stay-range-value">
+                      <strong id="list-range-end-display">Wyjazd</strong>
+                    </span>
+                  </span>
+                  <img
+                    class="stay-range-chevron"
+                    src="assets/chevron.svg"
+                    alt=""
+                  />
+                </button>
+                <div
+                  id="list-range-popover"
+                  class="stay-range-popover"
+                  role="dialog"
+                  aria-label="Filtruj rezerwacje według terminu pobytu"
+                  hidden
+                >
+                  <div class="stay-range-head">
+                    <button
+                      type="button"
+                      id="list-range-prev"
+                      aria-label="Poprzedni miesiąc"
+                    >
+                      ‹
+                    </button>
+                    <div class="stay-range-month-titles">
+                      <strong id="list-range-month-primary"
+                        >Październik 2026</strong
+                      >
+                      <strong id="list-range-month-secondary"
+                        >Listopad 2026</strong
+                      >
+                    </div>
+                    <button
+                      type="button"
+                      id="list-range-next"
+                      aria-label="Następny miesiąc"
+                    >
+                      ›
+                    </button>
+                  </div>
+                  <div class="stay-range-calendars">
+                    <section class="stay-range-calendar">
+                      <div class="stay-range-weekdays" aria-hidden="true">
+                        <span>Pn</span><span>Wt</span><span>Śr</span
+                        ><span>Cz</span><span>Pt</span><span>So</span
+                        ><span>Nd</span>
+                      </div>
+                      <div
+                        id="list-range-days-primary"
+                        class="stay-range-days"
+                      ></div>
+                    </section>
+                    <section class="stay-range-calendar">
+                      <div class="stay-range-weekdays" aria-hidden="true">
+                        <span>Pn</span><span>Wt</span><span>Śr</span
+                        ><span>Cz</span><span>Pt</span><span>So</span
+                        ><span>Nd</span>
+                      </div>
+                      <div
+                        id="list-range-days-secondary"
+                        class="stay-range-days"
+                      ></div>
+                    </section>
+                  </div>
+                  <p id="list-range-hint" class="stay-range-hint">
+                    Wybierz datę przyjazdu
+                  </p>
+                  <div
+                    class="stay-range-flexibility"
+                    aria-label="Elastyczność terminu"
+                  >
+                    <button
+                      type="button"
+                      class="selected"
+                      data-list-flex-days="0"
+                    >
+                      Dokładny termin
+                    </button>
+                    <button type="button" data-list-flex-days="1">
+                      ± 1 dzień
+                    </button>
+                    <button type="button" data-list-flex-days="2">
+                      ± 2 dni
+                    </button>
+                    <button type="button" data-list-flex-days="3">
+                      ± 3 dni
+                    </button>
+                    <button type="button" data-list-flex-days="7">
+                      ± 7 dni
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
           <div
             id="active-filters"
             class="active-filters"
@@ -448,7 +486,14 @@
                 ›
               </button>
             </nav>
-            <span id="result-count" class="sr-only">8 wyników</span>
+            <span
+              id="result-count"
+              class="sr-only"
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+              >8 wyników</span
+            >
             <span id="pagination-summary">1–8 z 8</span>
           </footer>
         </section>
@@ -480,15 +525,25 @@
                       <span class="stay-range-values">
                         <span class="stay-range-value">
                           <small>Data przyjazdu</small>
-                          <strong id="stay-arrival-display">pon., 2 lis.</strong>
+                          <strong id="stay-arrival-display"
+                            >pon., 2 lis.</strong
+                          >
                         </span>
-                        <span class="stay-range-separator" aria-hidden="true">–</span>
+                        <span class="stay-range-separator" aria-hidden="true"
+                          >–</span
+                        >
                         <span class="stay-range-value">
                           <small>Data wyjazdu</small>
-                          <strong id="stay-departure-display">czw., 5 lis.</strong>
+                          <strong id="stay-departure-display"
+                            >czw., 5 lis.</strong
+                          >
                         </span>
                       </span>
-                      <span class="stay-range-chevron" aria-hidden="true">⌄</span>
+                      <img
+                        class="stay-range-chevron"
+                        src="assets/chevron.svg"
+                        alt=""
+                      />
                     </button>
                     <input name="arrival" type="hidden" value="2026-11-02" />
                     <input name="departure" type="hidden" value="2026-11-05" />
@@ -500,34 +555,79 @@
                       hidden
                     >
                       <div class="stay-range-head">
-                        <button type="button" id="stay-range-prev" aria-label="Poprzedni miesiąc">‹</button>
+                        <button
+                          type="button"
+                          id="stay-range-prev"
+                          aria-label="Poprzedni miesiąc"
+                        >
+                          ‹
+                        </button>
                         <div class="stay-range-month-titles">
-                          <strong id="stay-range-month-primary">Październik 2026</strong>
-                          <strong id="stay-range-month-secondary">Listopad 2026</strong>
+                          <strong id="stay-range-month-primary"
+                            >Październik 2026</strong
+                          >
+                          <strong id="stay-range-month-secondary"
+                            >Listopad 2026</strong
+                          >
                         </div>
-                        <button type="button" id="stay-range-next" aria-label="Następny miesiąc">›</button>
+                        <button
+                          type="button"
+                          id="stay-range-next"
+                          aria-label="Następny miesiąc"
+                        >
+                          ›
+                        </button>
                       </div>
                       <div class="stay-range-calendars">
                         <section class="stay-range-calendar">
                           <div class="stay-range-weekdays" aria-hidden="true">
-                            <span>Pn</span><span>Wt</span><span>Śr</span><span>Cz</span><span>Pt</span><span>So</span><span>Nd</span>
+                            <span>Pn</span><span>Wt</span><span>Śr</span
+                            ><span>Cz</span><span>Pt</span><span>So</span
+                            ><span>Nd</span>
                           </div>
-                          <div id="stay-range-days-primary" class="stay-range-days"></div>
+                          <div
+                            id="stay-range-days-primary"
+                            class="stay-range-days"
+                          ></div>
                         </section>
                         <section class="stay-range-calendar">
                           <div class="stay-range-weekdays" aria-hidden="true">
-                            <span>Pn</span><span>Wt</span><span>Śr</span><span>Cz</span><span>Pt</span><span>So</span><span>Nd</span>
+                            <span>Pn</span><span>Wt</span><span>Śr</span
+                            ><span>Cz</span><span>Pt</span><span>So</span
+                            ><span>Nd</span>
                           </div>
-                          <div id="stay-range-days-secondary" class="stay-range-days"></div>
+                          <div
+                            id="stay-range-days-secondary"
+                            class="stay-range-days"
+                          ></div>
                         </section>
                       </div>
-                      <p id="stay-range-hint" class="stay-range-hint">Wybierz datę przyjazdu</p>
-                      <div class="stay-range-flexibility" aria-label="Elastyczność terminu">
-                        <button type="button" class="selected" data-flex-days="0">Dokładny termin</button>
-                        <button type="button" data-flex-days="1">± 1 dzień</button>
-                        <button type="button" data-flex-days="2">± 2 dni</button>
-                        <button type="button" data-flex-days="3">± 3 dni</button>
-                        <button type="button" data-flex-days="7">± 7 dni</button>
+                      <p id="stay-range-hint" class="stay-range-hint">
+                        Wybierz datę przyjazdu
+                      </p>
+                      <div
+                        class="stay-range-flexibility"
+                        aria-label="Elastyczność terminu"
+                      >
+                        <button
+                          type="button"
+                          class="selected"
+                          data-flex-days="0"
+                        >
+                          Dokładny termin
+                        </button>
+                        <button type="button" data-flex-days="1">
+                          ± 1 dzień
+                        </button>
+                        <button type="button" data-flex-days="2">
+                          ± 2 dni
+                        </button>
+                        <button type="button" data-flex-days="3">
+                          ± 3 dni
+                        </button>
+                        <button type="button" data-flex-days="7">
+                          ± 7 dni
+                        </button>
                       </div>
                       <input type="hidden" name="dateFlexibility" value="0" />
                     </div>
@@ -544,10 +644,17 @@
                 </label>
                 <div class="stay-room-guidance">
                   <img src="assets/bed.svg" alt="" />
-                  <span>Wybierz dostępny pokój w karcie po prawej stronie.</span>
+                  <span
+                    >Wybierz dostępny pokój w karcie po prawej stronie.</span
+                  >
                 </div>
               </div>
-              <input class="room-value-input" type="hidden" name="room" value="101" />
+              <input
+                class="room-value-input"
+                type="hidden"
+                name="room"
+                value="101"
+              />
 
               <h2>Dane głównego gościa</h2>
               <div class="modal-grid">
@@ -925,11 +1032,13 @@
                   </button>
                 </div>
                 <details class="calendar-accordion">
-                  <summary style="display:flex">
+                  <summary style="display: flex">
                     <h3 class="smaller">Dostępność w terminie</h3>
-                    <span class="calendar-accordion-chevron" aria-hidden="true"
-                      >⌄</span
-                    >
+                    <img
+                      class="calendar-accordion-chevron"
+                      src="assets/chevron.svg"
+                      alt=""
+                    />
                   </summary>
                   <div class="calendar-accordion-content">
                     <div class="calendar-head">
@@ -1002,12 +1111,16 @@
       </main>
     </div>
 
-    <dialog id="details-modal" class="modal details-modal">
+    <dialog
+      id="details-modal"
+      class="modal details-modal"
+      aria-labelledby="details-modal-title"
+    >
       <form id="close-details-modal" method="dialog"></form>
       <div class="modal-form">
         <div class="modal-head">
           <div>
-            <h2>Szczegóły Rezerwacji</h2>
+            <h2 id="details-modal-title">Szczegóły rezerwacji</h2>
             <div
               id="details-current-status"
               class="details-current-status"
@@ -1101,15 +1214,8 @@
                 <span id="details-stay-label">—</span>
                 <strong id="details-stay-total">—</strong>
               </div>
-              <div
-                id="details-extras-list"
-                class="price-receipt-extras"
-              ></div>
-              <div
-                id="details-discount"
-                class="price-receipt-discount"
-                hidden
-              >
+              <div id="details-extras-list" class="price-receipt-extras"></div>
+              <div id="details-discount" class="price-receipt-discount" hidden>
                 <span id="details-discount-label">Rabat</span>
                 <strong id="details-discount-value">—</strong>
               </div>
@@ -1150,11 +1256,15 @@
       </div>
     </dialog>
 
-    <dialog id="room-picker" class="modal room-picker-modal">
+    <dialog
+      id="room-picker"
+      class="modal room-picker-modal"
+      aria-labelledby="room-picker-title"
+    >
       <form id="close-room-picker" method="dialog"></form>
       <div class="modal-form">
         <div class="modal-head">
-          <h2>Wybierz pokój</h2>
+          <h2 id="room-picker-title">Wybierz pokój</h2>
           <button
             class="modal-close"
             form="close-room-picker"
@@ -1167,6 +1277,7 @@
         <div class="room-picker-layout">
           <aside class="room-picker-filters" aria-label="Filtry pokoi">
             <label class="search-field room-search"
+              ><span class="sr-only">Wyszukaj pokój</span
               ><img src="assets/search.svg" alt="" /><input
                 id="room-search"
                 type="search"
@@ -1204,7 +1315,10 @@
                 <label><input type="checkbox" value="Balkon" />Balkon</label>
                 <label><input type="checkbox" value="Parking" />Parking</label>
                 <label
-                  ><input type="checkbox" value="Klimatyzacja" />Klimatyzacja</label
+                  ><input
+                    type="checkbox"
+                    value="Klimatyzacja"
+                  />Klimatyzacja</label
                 >
                 <label
                   ><input type="checkbox" value="Aneks kuchenny" />Aneks
@@ -1224,7 +1338,13 @@
           <section class="room-picker-results" aria-label="Dostępne pokoje">
             <div class="room-list-head">
               <strong>Dostępne pokoje</strong>
-              <span id="room-result-count">0 wyników</span>
+              <span
+                id="room-result-count"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+                >0 wyników</span
+              >
             </div>
             <div id="room-list" class="room-list"></div>
           </section>
@@ -1241,7 +1361,11 @@
       </div>
     </dialog>
 
-    <dialog id="success-modal" class="modal success-modal">
+    <dialog
+      id="success-modal"
+      class="modal success-modal"
+      aria-labelledby="success-modal-title"
+    >
       <form id="close-success-modal" method="dialog"></form>
       <div class="modal-form success-content">
         <div
@@ -1249,7 +1373,7 @@
           class="success-lottie"
           aria-hidden="true"
         ></div>
-        <h2>Gotowe!</h2>
+        <h2 id="success-modal-title">Gotowe!</h2>
         <p class="success-message">Nowa rezerwacja została pomyślnie dodana.</p>
         <div class="success-summary">
           <div><span>Gość</span><strong id="success-guest">—</strong></div>
@@ -1278,12 +1402,50 @@
       </div>
     </dialog>
 
-    <div class="toast" id="toast" role="status" aria-live="polite">
-      <img src="assets/check.svg" alt="" /><span
-        >Rezerwacja została dodana</span
+    <div
+      class="toast"
+      id="toast"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      hidden
+    >
+      <img src="assets/check.svg" alt="" /><span></span>
+    </div>
+    <div
+      class="row-actions-menu"
+      id="row-actions-menu"
+      role="menu"
+      aria-label="Akcje rezerwacji"
+      hidden
+    >
+      <button type="button" role="menuitem" data-row-option="edit">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 20h9" />
+          <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z" />
+        </svg>
+        <span>Edytuj</span>
+      </button>
+      <button type="button" role="menuitem" data-row-option="archive">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 7h16v13H4Z" />
+          <path d="M3 3h18v4H3Zm6 9h6" />
+        </svg>
+        <span>Archiwizuj</span>
+      </button>
+      <button
+        type="button"
+        class="row-actions-menu-danger"
+        role="menuitem"
+        data-row-option="delete"
       >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m4 4v6m6-6v6" />
+        </svg>
+        <span>Usuń</span>
+      </button>
     </div>
     <script src="assets/lottie-light.min.js"></script>
-    <script src="script.js?v=20261029-34"></script>
+    <script src="script.js?v=20261029-36"></script>
   </body>
 </html>

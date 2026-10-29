@@ -36,7 +36,7 @@
   --shadow-table-row-hover: 0 2px 5px rgba(30, 29, 30, .08), 0 10px 24px rgba(30, 29, 30, .07);
   --sidebar-width: 250px;
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
-  --font-size-2xs: .625rem;
+  --font-size-2xs: .6875rem;
   --font-size-xs: .75rem;
   --font-size-sm: .875rem;
   --font-size-base: 1rem;
@@ -80,8 +80,33 @@ html, body {
   background: linear-gradient(180deg, rgba(255, 255, 255, 1) 32%, rgb(247, 247, 247) 100%);
 }
 
+::selection {
+  background: #dedbdd;
+  color: var(--color-text-primary);
+}
+
 body {
   font-size: var(--font-size-base);
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 200;
+  top: var(--space-3);
+  left: var(--space-3);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--color-brand-primary);
+  color: white;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(calc(-100% - var(--space-6)));
+  transition: transform .16s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
 }
 
 button, input, select, textarea {
@@ -150,7 +175,7 @@ button {
 }
 
 .brand-copy small {
-  color: var(--color-text-disabled);
+  color: var(--color-text-tertiary);
   font-size: var(--font-size-2xs);
   letter-spacing: 1.1px;
   margin-top: 4px;
@@ -289,7 +314,7 @@ button {
 .sidebar nav p {
   margin: 16px 8px 5px;
   font-size: var(--font-size-xs);
-  color: var(--color-text-disabled);
+  color: var(--color-text-tertiary);
 }
 
 .sidebar nav a {
@@ -462,7 +487,7 @@ h1 {
   background: #1e1d1e;
 }
 
-.primary-button span {
+.primary-button span:not(.primary-button-symbol) {
   width: 20px;
   height: 20px;
   border: 1px solid rgba(255, 255, 255, .65);
@@ -470,6 +495,10 @@ h1 {
   display: grid;
   place-items: center;
   font-size: var(--font-size-sm);
+}
+
+.primary-button-symbol {
+  line-height: 1;
 }
 
 .secondary-button {
@@ -617,8 +646,7 @@ h1 {
 }
 
 .list-date-range-filter {
-  width: min(620px, 100%);
-  margin-top: var(--space-3);
+  width: min(320px, 100%);
   display: grid;
   gap: 6px;
 }
@@ -842,7 +870,7 @@ h1 {
   display: block;
   padding: 9px 10px 4px;
   color: var(--color-text-tertiary);
-  font-size: var(--font-size-2xs);
+  font-size: var(--font-size-xs);
   font-weight: 600;
   letter-spacing: .7px;
   text-transform: uppercase;
@@ -886,8 +914,16 @@ h1 {
 }
 
 .search-field input::placeholder {
+  color: var(--color-text-tertiary);
+}
 
-  color: var(--color-text-disabled);
+.search-field:focus-within {
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 0 0 3px rgba(47, 45, 47, .08);
+}
+
+.search-field input:focus-visible {
+  outline: 0;
 }
 
 .date-button {
@@ -999,7 +1035,7 @@ select:hover {
 }
 
 .table-actionbar {
-  min-height: 68px;
+  min-height: 48px;
   padding: 12px 0px;
   border-bottom: 1px solid var(--color-border-tertiary);
   display: flex;
@@ -1147,13 +1183,33 @@ col.actions {
   display: none !important;
 }
 
-col.free-room-number { width: 90px; }
-col.free-room-type { width: 150px; }
-col.free-room-capacity { width: 190px; }
-col.free-room-equipment { width: 260px; }
-col.free-room-availability-col { width: auto; }
-col.free-room-price { width: 120px; }
-col.free-room-action { width: 150px; }
+col.free-room-number {
+  width: 90px;
+}
+
+col.free-room-type {
+  width: 150px;
+}
+
+col.free-room-capacity {
+  width: 190px;
+}
+
+col.free-room-equipment {
+  width: 260px;
+}
+
+col.free-room-availability-col {
+  width: auto;
+}
+
+col.free-room-price {
+  width: 120px;
+}
+
+col.free-room-action {
+  width: 150px;
+}
 
 .free-room-row td>small,
 .free-room-row .amount small {
@@ -1359,8 +1415,8 @@ tbody tr[data-reservation-room]:focus-visible {
 }
 
 .guest-name-list small {
-  color: var(--color-text-disabled);
-  font-size: var(--font-size-2xs);
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-xs);
   font-weight: 500;
 }
 
@@ -1472,7 +1528,7 @@ tbody tr[data-reservation-room]:focus-visible {
 
 .amount small {
   display: block;
-  color: var(--color-text-disabled);
+  color: var(--color-text-tertiary);
   font-weight: 400;
   margin-top: 3px;
 }
@@ -1506,8 +1562,8 @@ tbody tr[data-reservation-room]:focus-visible {
 }
 
 .more-button {
-  width: 28px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border: 0;
   background: transparent;
   display: grid;
@@ -1522,6 +1578,65 @@ tbody tr[data-reservation-room]:focus-visible {
 .more-button img {
   width: 15px;
   height: 15px;
+}
+
+.more-button[aria-expanded="true"] {
+  background: var(--color-bg-surface-active);
+}
+
+.row-actions-menu {
+  position: fixed;
+  z-index: 80;
+  width: 188px;
+  padding: 6px;
+  border: 1px solid var(--color-border-tertiary);
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(31, 28, 36, 0.08), 0 14px 34px rgba(31, 28, 36, 0.12);
+}
+
+.row-actions-menu button {
+  width: 100%;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-align: left;
+}
+
+.row-actions-menu button:hover,
+.row-actions-menu button:focus-visible {
+  background: var(--color-bg-surface-active);
+  color: var(--color-text-primary);
+}
+
+.row-actions-menu svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.row-actions-menu .row-actions-menu-danger {
+  color: var(--color-danger);
+}
+
+.row-actions-menu .row-actions-menu-danger:hover,
+.row-actions-menu .row-actions-menu-danger:focus-visible {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
 }
 
 .empty-state {
@@ -1716,7 +1831,7 @@ tbody tr[data-reservation-room]:focus-visible {
 
 .stay-range-toggle {
   width: 100%;
-  min-height: 68px;
+  min-height: 48px;
   border: 1px solid var(--color-border-tertiary);
   border-radius: var(--radius-md);
   background: white;
@@ -1761,7 +1876,7 @@ tbody tr[data-reservation-room]:focus-visible {
 
 .stay-range-value small {
   color: var(--color-text-tertiary);
-  font-size: var(--font-size-2xs);
+  font-size: var(--font-size-xs);
   font-weight: 400;
 }
 
@@ -1780,10 +1895,11 @@ tbody tr[data-reservation-room]:focus-visible {
   font-size: var(--font-size-md);
 }
 
-.stay-range-chevron {
-  color: var(--color-text-tertiary);
-  font-size: var(--font-size-lg);
-  text-align: center;
+.stay-range-toggle img.stay-range-chevron {
+  width: 14px;
+  height: 14px;
+  margin-inline: auto;
+  display: block;
   transition: transform .15s ease;
 }
 
@@ -2317,12 +2433,10 @@ h3.smaller {
 .calendar-accordion-chevron {
   width: 28px;
   height: 28px;
+  padding: 7px;
   border-radius: 8px;
   background: var(--color-bg-surface-secondary);
-  display: grid;
-  place-items: center;
-  color: var(--color-text-tertiary);
-  font-size: var(--font-size-lg);
+  display: block;
   transition: transform .15s ease;
 }
 
@@ -2374,9 +2488,9 @@ h3.smaller {
 }
 
 .calendar-weekdays span {
-  color: var(--color-text-disabled);
+  color: var(--color-text-tertiary);
   text-align: center;
-  font-size: var(--font-size-2xs);
+  font-size: var(--font-size-xs);
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -3712,7 +3826,7 @@ button.secondary {
 }
 
 .success-modal {
-  width: min(500px, calc(100vw - 32px));
+  width: min(320px, calc(100vw - 32px));
 }
 
 .success-content {
@@ -3730,6 +3844,10 @@ button.secondary {
   margin: 0 auto var(--space-6);
   overflow: hidden;
   border-radius: 50%;
+}
+
+.success-lottie.is-static {
+  background: var(--color-success);
 }
 
 .success-lottie svg {
@@ -3813,7 +3931,11 @@ button.secondary {
     --sidebar-width: 78px;
   }
 
-  .brand-copy, .brand em, .sidebar nav a:not(.active) {
+  .brand-copy, .brand em {
+    display: none;
+  }
+
+  .sidebar nav a:not(.active) {
     font-size: 0;
   }
 
@@ -3898,7 +4020,7 @@ button.secondary {
     grid-template-columns: 62px 1fr auto;
   }
 
-  .today span, .today img {
+  .today>span, .today>img {
     display: none;
   }
 
@@ -3941,14 +4063,25 @@ button.secondary {
 
   .page-heading {
     align-items: center;
+    gap: var(--space-3);
+  }
+
+  .page-heading h1 {
+    font-size: 1.5rem;
   }
 
   h1 {
     font-size: var(--font-size-2xl);
   }
 
-  .primary-button {
-    padding-inline: 13px;
+  .page-heading .primary-button {
+    padding-inline: 10px;
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
+  }
+
+  .page-heading .primary-button-symbol {
+    display: none;
   }
 
   .stats-grid {
@@ -4139,8 +4272,34 @@ button.secondary {
   }
 }
 
-:where(
-  .primary-button,
+@media (max-width: 420px) {
+  .today-weekday {
+    display: none;
+  }
+
+  .today strong {
+    font-size: var(--font-size-xs);
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 360px) {
+  .page-heading {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .page-heading>div:first-child,
+  .page-heading-actions {
+    width: 100%;
+  }
+
+  .page-heading .primary-button {
+    flex: 1;
+  }
+}
+
+:where(.primary-button,
   .secondary-button,
   .back-button,
   .filters-toggle,
@@ -4159,14 +4318,12 @@ button.secondary {
   .modal-close,
   .pagination button,
   .page-size-control select,
-  .calendar-accordion summary
-) {
+  .calendar-accordion summary) {
   box-shadow: var(--shadow-interactive);
   transition: border-color .16s ease, background .16s ease, box-shadow .16s ease, transform .16s ease;
 }
 
-:where(
-  .primary-button,
+:where(.primary-button,
   .secondary-button,
   .back-button,
   .filters-toggle,
@@ -4185,8 +4342,7 @@ button.secondary {
   .modal-close,
   .pagination button,
   .page-size-control select,
-  .calendar-accordion summary
-):hover:not(:disabled) {
+  .calendar-accordion summary):hover:not(:disabled) {
   box-shadow: var(--shadow-interactive-hover);
   transform: translateY(-1px);
 }
@@ -4222,6 +4378,21 @@ tbody tr {
 tbody tr:hover {
   z-index: 1;
   box-shadow: var(--shadow-table-row-hover);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-brand-primary);
+  outline-offset: 2px;
+}
+
+input,
+textarea {
+  caret-color: var(--color-brand-primary);
 }
 
 @media (prefers-reduced-motion: reduce) {

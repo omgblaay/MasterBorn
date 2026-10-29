@@ -3,389 +3,645 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Hotel Manager — tablica procesu</title>
+    <title>Hotel Manager — proces projektowy</title>
     <style>
       :root {
-        --ink: #242124;
-        --muted: #706b70;
-        --line: #dedade;
-        --paper: #f5f3f2;
-        --white: #fff;
-        --yellow: #fff1ad;
-        --blue: #dcecff;
-        --green: #dff3df;
-        --pink: #f5dfe8;
-        --purple: #e9e1f7;
-        font-family:
-          ui-sans-serif,
-          system-ui,
-          -apple-system,
-          BlinkMacSystemFont,
-          "Segoe UI",
-          sans-serif;
+        --ink: #1d1d1f;
+        --muted: #6d6d72;
+        --subtle: #929297;
+        --line: #e5e5e7;
+        --surface: #f7f7f8;
+        --accent: #8a6500;
+        --accent-soft: #fff5cf;
+        --radius-sm: 7px;
+        --radius-md: 12px;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+          BlinkMacSystemFont, "Segoe UI", sans-serif;
         color: var(--ink);
-        /* background: var(--paper); */
+        background: #fff;
         font-size: 16px;
       }
 
-      * {
-        box-sizing: border-box;
-      }
-      body {
-        margin: 0;
-      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body { margin: 0; background: #fff; }
+      ::selection { background: var(--accent-soft); color: var(--ink); }
+
       main {
-        width: min(1440px, calc(100% - 48px));
+        width: min(760px, calc(100% - 40px));
         margin: 0 auto;
-        padding: 56px 0 80px;
+        padding: 88px 0 112px;
       }
+
       header {
-        display: grid;
-        grid-template-columns: 1.35fr 0.65fr;
-        gap: 48px;
-        align-items: end;
-        margin-bottom: 52px;
+        padding-bottom: 64px;
+        border-bottom: 1px solid var(--line);
       }
-      .eyebrow {
-        margin: 0 0 12px;
-        color: var(--muted);
-        font-size: 0.75rem;
-        font-weight: 700;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-      }
+
+      h1, h2, h3, p { margin-top: 0; }
+
       h1 {
-        max-width: 1200px;
-        margin: 0;
-        font-size: clamp(2.8rem, 6vw, 6rem);
-        line-height: 0.96;
-        letter-spacing: -0.055em;
+        max-width: 700px;
+        margin-bottom: 22px;
+        font-size: clamp(2.4rem, 7vw, 4.6rem);
+        line-height: 0.98;
+        letter-spacing: -0.04em;
+        text-wrap: balance;
       }
-      .lead {
-        margin: 0;
+
+      .intro {
+        max-width: 650px;
+        margin-bottom: 26px;
         color: var(--muted);
-        font-size: 1.1rem;
-        line-height: 1.6;
+        font-size: 1.08rem;
+        line-height: 1.72;
       }
-      section {
-        margin-top: 56px;
+
+      .byline, .meta {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 7px 12px;
+        color: var(--subtle);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.76rem;
+        line-height: 1.5;
       }
+
+      .byline span + span::before,
+      .meta span + span::before {
+        content: "·";
+        margin-right: 12px;
+        color: #c4c4c7;
+      }
+
+      .live-link {
+        width: fit-content;
+        min-height: 42px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 30px;
+        padding: 10px 14px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        color: var(--ink);
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: border-color 160ms ease, background 160ms ease,
+          box-shadow 160ms ease, transform 160ms ease;
+      }
+
+      .live-link:hover {
+        border-color: #cfcfd2;
+        background: var(--surface);
+        box-shadow: 0 2px 5px rgba(29, 29, 31, 0.06),
+          0 8px 20px rgba(29, 29, 31, 0.07);
+        transform: translateY(-1px);
+      }
+
+      .live-link:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+      }
+
+      .live-link svg {
+        width: 16px;
+        height: 16px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      section { margin-top: 88px; scroll-margin-top: 32px; }
+      .section-heading { margin-bottom: 34px; }
+
       h2 {
-        margin: 0 0 20px;
-        font-size: 1.6rem;
+        margin-bottom: 12px;
+        font-size: clamp(1.45rem, 4vw, 1.85rem);
+        line-height: 1.2;
         letter-spacing: -0.025em;
       }
-      .board {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 24px;
+
+      .section-heading > p {
+        max-width: 660px;
+        margin-bottom: 0;
+        color: var(--muted);
+        line-height: 1.7;
       }
-      .column {
-        /* min-height: 540px; */
-        /* background: rgba(255, 255, 255, 0.56); */
-      }
-      .column h3 {
-        margin: 2px 4px 16px;
-        font-size: 0.78rem;
-        letter-spacing: 0.09em;
-        text-transform: uppercase;
-      }
-      .note {
-        min-height: 118px;
-        margin-bottom: 12px;
-        border-radius: 3px 14px 4px 12px;
-        padding: 18px;
-        box-shadow: 0 8px 20px rgba(37, 31, 37, 0.04);
-        font-size: 0.94rem;
-        line-height: 1.45;
-        transform: rotate(-1deg);
-      }
-      .note:nth-of-type(even) {
-        transform: rotate(0.55deg);
-      }
-      .observation .note {
-        background: var(--yellow);
-      }
-      .question .note {
-        background: var(--blue);
-      }
-      .decision .note {
-        background: var(--green);
-      }
-      .validation .note {
-        background: var(--pink);
-      }
-      .timeline {
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        border-top: 1px solid var(--line);
-      }
-      .step {
-        position: relative;
-        padding: 28px 18px 8px 0;
-      }
-      .step::before {
+
+      .flow { position: relative; }
+
+      .flow::before {
         content: "";
         position: absolute;
-        top: -6px;
-        left: 0;
-        width: 11px;
-        height: 11px;
-        border-radius: 50%;
-        background: var(--ink);
+        top: 18px;
+        bottom: 22px;
+        left: 16px;
+        width: 1px;
+        background: var(--line);
       }
-      .step b {
-        display: block;
-        margin-bottom: 7px;
-        font-size: 0.9rem;
-      }
-      .step span {
-        color: var(--muted);
-        font-size: 0.78rem;
-        line-height: 1.4;
-      }
-      .trace {
+
+      .flow-step {
+        position: relative;
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 34px minmax(0, 1fr);
         gap: 18px;
+        padding-bottom: 46px;
       }
-      .card {
-        /* border: 1px solid var(--line);
-        border-radius: 18px;
-        background: var(--white);
-        padding: 26px; */
-      }
-      .card h3 {
-        margin: 0 0 16px;
-        font-size: 1rem;
-      }
-      blockquote {
-        margin: 0;
-        border-left: 3px solid var(--ink);
-        padding-left: 18px;
-        color: #3e393e;
-        background: #fff;
-        font:
-          1rem/1.6 ui-monospace,
-          SFMono-Regular,
-          Menlo,
-          monospace;
-      }
-      .iteration-list {
+
+      .flow-step:last-child { padding-bottom: 0; }
+
+      .step-number {
+        position: relative;
+        z-index: 1;
+        width: 34px;
+        height: 24px;
         display: grid;
-        gap: 8px;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: #fff;
+        color: var(--subtle);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.68rem;
+      }
+
+      .flow-step.is-loop .step-number {
+        border-color: #e0c86f;
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+
+      .flow-content h3 {
+        margin: 0 0 6px;
+        font-size: 1.05rem;
+        line-height: 1.4;
+        letter-spacing: -0.012em;
+      }
+
+      .flow-content > p {
+        margin: 15px 0 0;
+        color: var(--muted);
+        line-height: 1.68;
+      }
+
+      .loop-label {
+        margin-top: 22px;
+        color: var(--accent);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.72rem;
+      }
+
+      .loop-label::before { content: "↳ "; }
+
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 17px;
+      }
+
+      .tag {
+        padding: 7px 9px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        background: var(--surface);
+        color: #55555a;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.72rem;
+      }
+
+      .audit-list, .outcome-list, .iteration-list {
         margin: 0;
         padding: 0;
         list-style: none;
       }
-      .iteration-list li {
-        border-radius: 10px;
-        background: var(--purple);
-        padding: 10px 12px;
-        font-size: 0.86rem;
-      }
-      .result {
+
+      .audit-list { border-top: 1px solid var(--line); }
+
+      .audit-list li {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 16px;
+        grid-template-columns: 130px minmax(0, 1fr);
+        gap: 22px;
+        padding: 22px 0;
+        border-bottom: 1px solid var(--line);
       }
-      .result .card strong {
+
+      .audit-list strong {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.74rem;
+        font-weight: 500;
+        color: var(--subtle);
+      }
+
+      .audit-list p {
+        margin: 0;
+        color: #3f3f43;
+        line-height: 1.62;
+      }
+
+      .trace { display: grid; gap: 48px; }
+
+      .trace-block h3 {
+        margin-bottom: 14px;
+        font-size: 1rem;
+        letter-spacing: -0.01em;
+      }
+
+      .process-videos {
+        display: grid;
+        gap: 28px;
+      }
+
+      .process-video {
+        margin: 0;
+      }
+
+      .process-video video {
+        width: 100%;
+        height: auto;
         display: block;
-        margin-bottom: 8px;
-        font-size: 1.15rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-md);
+        background: #171719;
+        box-shadow: 0 2px 6px rgba(29, 29, 31, 0.06),
+          0 12px 28px rgba(29, 29, 31, 0.08);
       }
-      .result .card span {
+
+      .process-video figcaption {
+        display: grid;
+        gap: 4px;
+        margin-top: 12px;
+      }
+
+      .process-video figcaption strong {
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      .process-video figcaption span {
         color: var(--muted);
-        line-height: 1.5;
+        font-size: 0.82rem;
+        line-height: 1.55;
       }
+
+      blockquote {
+        margin: 0;
+        padding: 22px 24px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-md);
+        background: var(--surface);
+        color: #353539;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.82rem;
+        line-height: 1.72;
+      }
+
+      .iteration-list { border-top: 1px solid var(--line); }
+
+      .iteration-list li {
+        display: grid;
+        grid-template-columns: 28px minmax(0, 1fr);
+        gap: 14px;
+        padding: 15px 0;
+        border-bottom: 1px solid var(--line);
+        color: #3f3f43;
+        line-height: 1.55;
+      }
+
+      .iteration-list span {
+        color: var(--subtle);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.72rem;
+        padding-top: 2px;
+      }
+
+      .outcome-list { display: grid; gap: 30px; }
+
+      .outcome-list li {
+        display: grid;
+        grid-template-columns: 34px minmax(0, 1fr);
+        gap: 18px;
+      }
+
+      .outcome-mark {
+        width: 24px;
+        height: 24px;
+        display: grid;
+        place-items: center;
+        margin-top: 1px;
+        border-radius: 50%;
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+
+      .outcome-mark svg {
+        width: 13px;
+        height: 13px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .outcome-list strong {
+        display: block;
+        margin-bottom: 7px;
+        font-size: 1rem;
+      }
+
+      .outcome-list p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
       footer {
-        margin-top: 60px;
-        padding-top: 20px;
+        margin-top: 88px;
+        padding-top: 24px;
         border-top: 1px solid var(--line);
-        color: var(--muted);
-        font-size: 0.78rem;
+        color: var(--subtle);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.72rem;
+        line-height: 1.6;
       }
-      @media (max-width: 960px) {
-        header,
-        .trace {
-          grid-template-columns: 1fr;
-        }
-        .board {
-          grid-template-columns: 1fr 1fr;
-        }
-        .timeline {
-          grid-template-columns: 1fr 1fr 1fr;
-        }
-        .result {
-          grid-template-columns: 1fr;
-        }
-      }
+
       @media (max-width: 620px) {
         main {
-          width: min(100% - 28px, 1440px);
-          padding-top: 32px;
+          width: min(100% - 28px, 760px);
+          padding: 52px 0 72px;
         }
-        .board,
-        .timeline {
-          grid-template-columns: 1fr;
-        }
-        .column {
-          min-height: 0;
-        }
+        header { padding-bottom: 44px; }
+        section { margin-top: 64px; }
+        .audit-list li { grid-template-columns: 1fr; gap: 8px; }
+        .flow-step { gap: 14px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
       }
     </style>
   </head>
   <body>
     <main>
       <header>
-        <div>
-          <p>MasterBorn · Krystian Błaszczyk</p>
-          <h1>Hotel Management System · Rework suggestions</h1>
+        <h1>Jak powstał nowy widok rezerwacji</h1>
+        <p class="intro">
+          Proces przebudowy hotelowego systemu zarządzania: od diagnozy
+          niejednoznacznej dostępności pokoju, przez decyzje projektowe, aż po
+          działający prototyp zbudowany bez backendu.
+        </p>
+        <div class="byline" aria-label="Informacje o projekcie">
+          <span>MasterBorn</span><span>Krystian Błaszczyk</span
+          ><span>Product design + prototype</span>
         </div>
+        <a
+          class="live-link"
+          href="https://omgblaay.github.io/MasterBorn/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Zobacz działający prototyp
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M7 5h8v8" />
+            <path d="m15 5-9.5 9.5" />
+          </svg>
+        </a>
       </header>
 
-      <section>
-        <div class="board">
-          <article class="column observation">
-            <h3>Obserwacje</h3>
-            <div class="note">
-              Rezerwacje, wolne pokoje i pokoje w naprawie były pokazane w
-              jednej tabeli.
-            </div>
-            <div class="note">
-              Status operacyjny był ukryty w nazwisku lub treści notatki.
-            </div>
-            <div class="note">
-              Szeroka tabela utrudniała szybkie skanowanie najważniejszych
-              informacji.
-            </div>
-          </article>
-          <article class="column question">
-            <h3>Pytania</h3>
-            <div class="note">
-              Co recepcjonista musi zobaczyć w pierwszych trzech sekundach?
-            </div>
-            <div class="note">
-              Jak pokazać, że wolny dziś pokój ma przyszłą rezerwację?
-            </div>
-            <div class="note">
-              Które dane powinny być zawsze widoczne, a które dopiero na
-              żądanie?
+      <section aria-labelledby="flow-title">
+        <div class="section-heading">
+          <h2 id="flow-title">Cały proces</h2>
+          <p>
+            Te same trzy etapy porządkowały pracę nad projektem. Środkowa pętla
+            powtarzała się przy każdej zmianie: problem, decyzja, implementacja
+            i szybka weryfikacja.
+          </p>
+        </div>
+
+        <div class="flow">
+          <article class="flow-step">
+            <span class="step-number">01</span>
+            <div class="flow-content">
+              <h3>Diagnoza starego widoku</h3>
+              <div class="meta">
+                <span>raz na początku</span><span>audyt interfejsu</span>
+              </div>
+              <p>
+                Zmapowałem zadania recepcji i rozdzieliłem trzy pojęcia, które
+                wcześniej były wymieszane: rezerwację, pokój oraz jego
+                dostępność w wybranym terminie.
+              </p>
             </div>
           </article>
-          <article class="column decision">
-            <h3>Decyzje</h3>
-            <div class="note">
-              Rozdzielenie rezerwacji, pokoju i dostępności jako osobnych pojęć.
-            </div>
-            <div class="note">
-              Widok kompaktowy do skanowania oraz pełny do analizy szczegółów.
-            </div>
-            <div class="note">
-              Kalendarz pokoju, jawne statusy i pille aktywnych filtrów.
+
+          <article class="flow-step is-loop">
+            <span class="step-number">02</span>
+            <div class="flow-content">
+              <h3>Pętla projektowa</h3>
+              <div class="meta">
+                <span>dla każdej funkcji</span><span>Figma + AI + kod</span>
+              </div>
+              <div class="tags" aria-label="Etapy pętli projektowej">
+                <span class="tag">Problem</span>
+                <span class="tag">Warianty</span>
+                <span class="tag">Decyzja</span>
+                <span class="tag">Prototyp</span>
+                <span class="tag">Każdy stan</span>
+                <span class="tag">Refinement</span>
+              </div>
+              <p>
+                Najpierw ustalałem logikę i hierarchię, potem budowałem pełny
+                przepływ. Każda uwaga trafiała z powrotem do prototypu — od
+                gęstości tabeli po wybór pokoju, płatności i zakres dat.
+              </p>
+              <div class="loop-label">następna funkcja</div>
             </div>
           </article>
-          <article class="column validation">
-            <h3>Walidacja</h3>
-            <div class="note">
-              Czy wolny pokój można przydzielić na cały wybrany termin?
-            </div>
-            <div class="note">
-              Czy użytkownik rozumie status bez interpretowania nazwiska i
-              notatek?
-            </div>
-            <div class="note">
-              Czy każdy aktywny filtr można zobaczyć i usunąć jednym
-              kliknięciem?
+
+          <article class="flow-step">
+            <span class="step-number">03</span>
+            <div class="flow-content">
+              <h3>Gotowy prototyp</h3>
+              <div class="meta">
+                <span>HTML</span><span>tokeny CSS</span><span>JavaScript</span>
+              </div>
+              <p>
+                Rezultatem jest klikalny widok bez backendu: lista rezerwacji,
+                osobne widoki czasowe, formularz dodawania i edycji, wybór
+                pokoju oraz komplet stanów potrzebnych do prezentacji logiki.
+              </p>
             </div>
           </article>
         </div>
       </section>
 
-      <section>
-        <h2>Proces w 6 krokach</h2>
-        <div class="timeline">
-          <div class="step">
-            <b>01 · Audyt</b
-            ><span>Problemy starego widoku i krytyczne zadania recepcji.</span>
-          </div>
-          <div class="step">
-            <b>02 · Model</b
-            ><span>Rozdzielenie rezerwacji, pokoi i dostępności.</span>
-          </div>
-          <div class="step">
-            <b>03 · Hierarchia</b
-            ><span>Statystyki, tabela i progresywne ujawnianie danych.</span>
-          </div>
-          <div class="step">
-            <b>04 · Przepływy</b
-            ><span>Nowa rezerwacja, wybór pokoju, szczegóły i edycja.</span>
-          </div>
-          <div class="step">
-            <b>05 · Prototyp</b
-            ><span>HTML, tokeny CSS i interakcje JavaScript bez backendu.</span>
-          </div>
-          <div class="step">
-            <b>06 · Iteracja</b
-            ><span>Dopracowanie gęstości, filtrów, dat i płatności.</span>
-          </div>
+      <section aria-labelledby="audit-title">
+        <div class="section-heading">
+          <h2 id="audit-title">Od obserwacji do decyzji</h2>
+          <p>
+            Najważniejsze pytanie nie dotyczyło estetyki tabeli. Recepcjonista
+            musiał szybko i pewnie ustalić, który pokój można przydzielić na
+            cały planowany pobyt.
+          </p>
         </div>
+
+        <ul class="audit-list">
+          <li>
+            <strong>obserwacja.md</strong>
+            <p>
+              Rezerwacje, wolne pokoje i pokoje w naprawie były pokazywane w
+              jednej tabeli, a status operacyjny ukrywał się w nazwisku lub
+              notatce.
+            </p>
+          </li>
+          <li>
+            <strong>pytanie.md</strong>
+            <p>
+              Jak pokazać, że pokój wolny dzisiaj może mieć przyszłą rezerwację
+              kolidującą z całym terminem pobytu?
+            </p>
+          </li>
+          <li>
+            <strong>decyzja.md</strong>
+            <p>
+              Rozdzielić widoki rezerwacji od dostępności pokoju, dodać jasne
+              statusy i pokazywać aktywne filtry bezpośrednio pod wyszukiwarką.
+            </p>
+          </li>
+          <li>
+            <strong>walidacja.md</strong>
+            <p>
+              Użytkownik powinien rozpoznać status bez interpretacji notatek i
+              potwierdzić dostępność pokoju dla pełnego zakresu dat.
+            </p>
+          </li>
+        </ul>
       </section>
 
-      <section>
-        <h2>Ślad pracy</h2>
+      <section aria-labelledby="trace-title">
+        <div class="section-heading">
+          <h2 id="trace-title">Ślad pracy</h2>
+          <p>
+            Projekt nie powstał z jednego promptu. Poniżej widać punkt startowy
+            i przykłady decyzji, które doprecyzowywały rozwiązanie.
+          </p>
+        </div>
+
         <div class="trace">
-          <article class="card">
+          <article class="trace-block">
             <h3>Pierwszy prompt</h3>
             <blockquote>
-              Implement this design from Figma. Dummy view with no backend logic
-              but just modals, filtering etc. For CSS use tokens.
+              Implement this design from Figma. Dummy view with no backend
+              logic but just modals, filtering etc. For CSS use tokens.
             </blockquote>
           </article>
-          <article class="card">
+
+          <article class="trace-block">
             <h3>Przykładowe iteracje z AI</h3>
-            <ul class="iteration-list">
-              <li>Pokój jako karta i osobny wybór zamiast dropdownu</li>
-              <li>Widok kompaktowy i pełny tabeli</li>
-              <li>Formularz jako osobna strona z kalendarzem</li>
-              <li>Szczegóły tylko do odczytu, edycja w pełnym formularzu</li>
-              <li>Filtry w panelu, aktywne wartości jako pille</li>
-            </ul>
+            <ol class="iteration-list">
+              <li><span>01</span>Pokój jako karta i osobny wybór zamiast dropdownu</li>
+              <li><span>02</span>Widok kompaktowy i pełny tabeli rezerwacji</li>
+              <li><span>03</span>Formularz jako osobna strona z kalendarzem</li>
+              <li><span>04</span>Szczegóły tylko do odczytu, edycja w pełnym formularzu</li>
+              <li><span>05</span>Filtry w panelu, aktywne wartości jako pille</li>
+              <li><span>06</span>Jedno pole zakresu dat i kalendarz z wyborem od–do</li>
+            </ol>
+          </article>
+
+          <article class="trace-block">
+            <h3>Nagrania procesu</h3>
+            <div class="process-videos">
+              <figure class="process-video">
+                <video controls preload="metadata" playsinline>
+                  <source src="vid2.mp4" type="video/mp4" />
+                  Twoja przeglądarka nie obsługuje odtwarzania wideo.
+                </video>
+                <figcaption>
+                  <strong>Iteracja 01</strong>
+                  <span
+                    >Praca nad strukturą widoku i doprecyzowanie głównego
+                    przepływu rezerwacji.</span
+                  >
+                </figcaption>
+              </figure>
+
+              <figure class="process-video">
+                <video controls preload="metadata" playsinline>
+                  <source src="vid3.mp4" type="video/mp4" />
+                  Twoja przeglądarka nie obsługuje odtwarzania wideo.
+                </video>
+                <figcaption>
+                  <strong>Iteracja 02</strong>
+                  <span
+                    >Dopracowanie interakcji, szczegółów formularza i stanów
+                    potrzebnych w codziennej pracy recepcji.</span
+                  >
+                </figcaption>
+              </figure>
+            </div>
           </article>
         </div>
       </section>
 
-      <section>
-        <h2>Rezultat</h2>
-        <div class="result">
-          <article class="card">
-            <strong>Jednoznaczna dostępność</strong
-            ><span
-              >Status pokoju jest oceniany w kontekście całego pobytu i
-              przyszłych rezerwacji.</span
-            >
-          </article>
-          <article class="card">
-            <strong>Mniej danych domyślnie</strong
-            ><span
-              >Widok kompaktowy wspiera skanowanie, pełny ujawnia szczegóły na
-              żądanie.</span
-            >
-          </article>
-          <article class="card">
-            <strong>Spójny przepływ</strong
-            ><span
-              >Dodawanie i edycja korzystają z tego samego formularza, a
-              szczegóły pozostają czytelne.</span
-            >
-          </article>
+      <section aria-labelledby="result-title">
+        <div class="section-heading">
+          <h2 id="result-title">Co zmieniło się w rozwiązaniu</h2>
+          <p>
+            Nowy interfejs porządkuje zadanie wokół decyzji operacyjnych, a nie
+            wokół struktury starej tabeli.
+          </p>
         </div>
+
+        <ul class="outcome-list">
+          <li>
+            <span class="outcome-mark" aria-hidden="true"
+              ><svg viewBox="0 0 16 16"><path d="m3.5 8 3 3 6-7" /></svg
+            ></span>
+            <div>
+              <strong>Jednoznaczna dostępność</strong>
+              <p>
+                Status pokoju jest oceniany w kontekście całego pobytu oraz
+                przyszłych rezerwacji.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span class="outcome-mark" aria-hidden="true"
+              ><svg viewBox="0 0 16 16"><path d="m3.5 8 3 3 6-7" /></svg
+            ></span>
+            <div>
+              <strong>Mniej danych domyślnie</strong>
+              <p>
+                Widok kompaktowy wspiera szybkie skanowanie, a pełny ujawnia
+                dodatkowe dane dopiero wtedy, gdy są potrzebne.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span class="outcome-mark" aria-hidden="true"
+              ><svg viewBox="0 0 16 16"><path d="m3.5 8 3 3 6-7" /></svg
+            ></span>
+            <div>
+              <strong>Jeden spójny przepływ</strong>
+              <p>
+                Dodawanie i edycja korzystają z tego samego formularza, a
+                szczegóły rezerwacji pozostają czytelnym podsumowaniem.
+              </p>
+            </div>
+          </li>
+        </ul>
       </section>
 
-      <!-- <footer>
-        Materiał do prezentacji procesu. Szczegółowa narracja i checklist
-        znajdują się w pliku CASE_STUDY_PL.md.
-      </footer> -->
+      <footer>
+        Hotel Manager · case study procesu · prototyp demonstracyjny bez
+        backendu
+      </footer>
     </main>
   </body>
 </html>

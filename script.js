@@ -238,7 +238,13 @@ const archivedRoomNumbers = [
   "201",
   "202",
 ];
-const archivedStatuses = ["Zakończona", "Zakończona", "Zakończona", "Anulowano", "Nie przyjechano"];
+const archivedStatuses = [
+  "Zakończona",
+  "Zakończona",
+  "Zakończona",
+  "Anulowano",
+  "Nie przyjechano",
+];
 const archivedPayments = ["Karta", "Przelew", "Gotówka"];
 const archivedSources = ["Bezpośrednio", "Booking.com", "Telefon"];
 
@@ -818,6 +824,7 @@ const statusMeta = {
 };
 
 const body = document.querySelector("#reservation-body");
+const rowActionsMenu = document.querySelector("#row-actions-menu");
 const resultCount = document.querySelector("#result-count");
 const search = document.querySelector("#search");
 const statusFilter = document.querySelector("#status-filter");
@@ -852,18 +859,14 @@ const breakfastNightsInput = document.querySelector("#breakfast-nights");
 const plannedGuestsSelect = document.querySelector("#planned-guests");
 const stayRangeToggle = document.querySelector("#stay-range-toggle");
 const stayRangePopover = document.querySelector("#stay-range-popover");
-const stayRangeDaysPrimary = document.querySelector(
-  "#stay-range-days-primary",
-);
+const stayRangeDaysPrimary = document.querySelector("#stay-range-days-primary");
 const stayRangeDaysSecondary = document.querySelector(
   "#stay-range-days-secondary",
 );
 const listDateRangeFilter = document.querySelector("#list-date-range-filter");
 const listRangeToggle = document.querySelector("#list-range-toggle");
 const listRangePopover = document.querySelector("#list-range-popover");
-const listRangeDaysPrimary = document.querySelector(
-  "#list-range-days-primary",
-);
+const listRangeDaysPrimary = document.querySelector("#list-range-days-primary");
 const listRangeDaysSecondary = document.querySelector(
   "#list-range-days-secondary",
 );
@@ -999,7 +1002,7 @@ function updateDateDisplays() {
   const formatDate = (value) => {
     const date = new Date(`${value}T12:00:00`);
     return Number.isNaN(date.getTime())
-      ? "Wybierz datę"
+      ? "Przyjadz"
       : new Intl.DateTimeFormat("pl-PL", {
           weekday: "short",
           day: "numeric",
@@ -1082,7 +1085,10 @@ function renderStayRangePicker() {
 
   const flexibility = form.elements.dateFlexibility.value;
   stayRangePopover.querySelectorAll("[data-flex-days]").forEach((button) => {
-    button.classList.toggle("selected", button.dataset.flexDays === flexibility);
+    button.classList.toggle(
+      "selected",
+      button.dataset.flexDays === flexibility,
+    );
   });
 }
 
@@ -1169,10 +1175,9 @@ function renderListRangePicker() {
 
   renderMonth(range.viewDate, listRangeDaysPrimary);
   renderMonth(secondaryMonth, listRangeDaysSecondary);
-  document.querySelector("#list-range-hint").textContent =
-    pendingListRangeStart
-      ? "Wybierz datę wyjazdu"
-      : "Wybierz datę przyjazdu";
+  document.querySelector("#list-range-hint").textContent = pendingListRangeStart
+    ? "Wybierz datę wyjazdu"
+    : "Wybierz datę przyjazdu";
   listRangePopover
     .querySelectorAll("[data-list-flex-days]")
     .forEach((button) => {
@@ -1441,11 +1446,7 @@ function renderPriceReceipt({
   document.querySelector("#receipt-total").textContent = formatPrice(total);
 }
 
-function syncBreakfastConfig({
-  setDefaults = false,
-  guests,
-  nights,
-} = {}) {
+function syncBreakfastConfig({ setDefaults = false, guests, nights } = {}) {
   const checked = breakfastExtra.checked;
   breakfastConfig.hidden = !checked;
   breakfastConfig
@@ -1672,7 +1673,11 @@ function getRoomAvailability(room) {
   const roomCapacity = Number.parseInt(room.capacity, 10);
   const reservedFrom = reservationDateToIso(room.reservedFrom || "");
   const hasConflict = Boolean(
-    reservedFrom && arrival && departure && reservedFrom >= arrival && reservedFrom < departure,
+    reservedFrom &&
+    arrival &&
+    departure &&
+    reservedFrom >= arrival &&
+    reservedFrom < departure,
   );
   const windowLabel =
     arrival && departure
@@ -1816,9 +1821,17 @@ function statusBadge(status) {
 }
 
 function playSuccessAnimation() {
+  const container = document.querySelector("#success-lottie");
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    container.classList.add("is-static");
+    successAnimation?.stop();
+    return;
+  }
+
+  container.classList.remove("is-static");
   if (!successAnimation) {
     successAnimation = lottie.loadAnimation({
-      container: document.querySelector("#success-lottie"),
+      container,
       renderer: "svg",
       loop: false,
       autoplay: true,
@@ -1866,8 +1879,9 @@ function updateReservationDetailsView(reservation) {
     guest.firstName || "—";
   document.querySelector("#details-last-name").textContent =
     guest.lastName || "—";
-  document.querySelector("#details-birth-date").textContent =
-    guest.birthDate ? isoToReservationDate(guest.birthDate) : "Nie podano";
+  document.querySelector("#details-birth-date").textContent = guest.birthDate
+    ? isoToReservationDate(guest.birthDate)
+    : "Nie podano";
   document.querySelector("#details-location").textContent =
     guest.location || "Nie podano";
   document.querySelector("#details-phone").textContent =
@@ -1910,10 +1924,8 @@ function updateReservationDetailsView(reservation) {
     const control = extraControls.find((item) => item.value === extra);
     const price = Number(control?.dataset.price || 0);
     const mode = control?.dataset.mode || "flat";
-    const configuredGuests =
-      Number(reservation.breakfastGuests) || guestCount;
-    const configuredNights =
-      Number(reservation.breakfastNights) || nights;
+    const configuredGuests = Number(reservation.breakfastGuests) || guestCount;
+    const configuredNights = Number(reservation.breakfastNights) || nights;
     const total =
       mode === "person-night"
         ? price * configuredGuests * configuredNights
@@ -2038,7 +2050,7 @@ function rowTemplate(item) {
     <td class="date-cell">${item.departure}${item.departureNote ? `<small>${item.departureNote}</small>` : ""}</td>
     <td>${item.nights}</td><td class="amount">${item.price}</td>
     <td class="amount">${item.total}${item.payment ? `<small>${item.payment}</small>` : ""}</td>
-    <td><div class="row-actions"><button class="row-button ${buttonClass}" data-action="${item.action}" data-room="${item.room}">${item.action === "Zamelduj" ? "✓ " : item.action === "Zarezerwuj" ? "⊙ " : ""}${item.action}</button><button class="more-button" aria-label="Więcej akcji"><img src="assets/ellipsis.svg" alt=""></button></div></td>
+    <td><div class="row-actions"><button class="row-button ${buttonClass}" data-action="${item.action}" data-room="${item.room}">${item.action === "Zamelduj" ? "✓ " : item.action === "Zarezerwuj" ? "⊙ " : ""}${item.action}</button><button type="button" class="more-button" data-row-menu data-room="${item.room}" aria-label="Więcej akcji dla rezerwacji ${item.guest}" aria-controls="row-actions-menu" aria-haspopup="menu" aria-expanded="false"><img src="assets/ellipsis.svg" alt=""></button></div></td>
   </tr>`;
 }
 
@@ -2081,7 +2093,9 @@ function getFilteredReservations() {
     const matchesPayment =
       isFreeRoom || payment === "all" || item.payment === payment;
     const matchesSource =
-      isFreeRoom || source === "all" || (item.source || "Bezpośrednio") === source;
+      isFreeRoom ||
+      source === "all" ||
+      (item.source || "Bezpośrednio") === source;
     const itemArrival = reservationDateToIso(item.arrival);
     const itemDeparture = reservationDateToIso(item.departure) || itemArrival;
     const matchesDateRange =
@@ -2091,12 +2105,14 @@ function getFilteredReservations() {
       (Boolean(itemArrival) &&
         itemArrival <= rangeEnd &&
         itemDeparture >= rangeStart);
-    return haystack.includes(query)
-      && matchesTableScope
-      && matchesStatus
-      && matchesPayment
-      && matchesSource
-      && matchesDateRange;
+    return (
+      haystack.includes(query) &&
+      matchesTableScope &&
+      matchesStatus &&
+      matchesPayment &&
+      matchesSource &&
+      matchesDateRange
+    );
   });
 }
 
@@ -2157,6 +2173,7 @@ function renderActiveFilters() {
 }
 
 function render() {
+  closeRowActionsMenu();
   const filtered = getFilteredReservations();
   const freeRoomMode = statOnlyFree;
   const reservationForm = document.querySelector("#reservation-form");
@@ -2197,11 +2214,19 @@ function render() {
 
 function showToast(message) {
   const toast = document.querySelector("#toast");
-  toast.querySelector("span").textContent = message;
-  toast.classList.add("show");
   window.clearTimeout(showToast.timeout);
+  window.clearTimeout(showToast.hideTimeout);
+  toast.hidden = false;
+  toast.querySelector("span").textContent = message;
+  window.requestAnimationFrame(() => toast.classList.add("show"));
   showToast.timeout = window.setTimeout(
-    () => toast.classList.remove("show"),
+    () => {
+      toast.classList.remove("show");
+      showToast.hideTimeout = window.setTimeout(() => {
+        toast.hidden = true;
+        toast.querySelector("span").textContent = "";
+      }, 250);
+    },
     2200,
   );
 }
@@ -2313,6 +2338,65 @@ const filtersToggle = document.querySelector("#filters-toggle");
 const filtersPopover = document.querySelector("#filters-popover");
 const actionsMenuToggle = document.querySelector("#actions-menu-toggle");
 const actionsMenu = document.querySelector("#actions-menu");
+let activeRowMenuTrigger = null;
+
+function closeRowActionsMenu({ restoreFocus = false } = {}) {
+  const trigger = activeRowMenuTrigger;
+  if (trigger) trigger.setAttribute("aria-expanded", "false");
+  activeRowMenuTrigger = null;
+  rowActionsMenu.hidden = true;
+  rowActionsMenu.removeAttribute("data-room");
+  if (restoreFocus) trigger?.focus();
+}
+
+function openRowActionsMenu(trigger) {
+  if (activeRowMenuTrigger === trigger && !rowActionsMenu.hidden) {
+    closeRowActionsMenu();
+    return;
+  }
+
+  closeRowActionsMenu();
+  activeRowMenuTrigger = trigger;
+  trigger.setAttribute("aria-expanded", "true");
+  rowActionsMenu.dataset.room = trigger.dataset.room;
+  rowActionsMenu.hidden = false;
+
+  const triggerRect = trigger.getBoundingClientRect();
+  const menuRect = rowActionsMenu.getBoundingClientRect();
+  const pageInset = 12;
+  const gap = 6;
+  const left = Math.min(
+    window.innerWidth - menuRect.width - pageInset,
+    Math.max(pageInset, triggerRect.right - menuRect.width),
+  );
+  const fitsBelow =
+    triggerRect.bottom + gap + menuRect.height <= window.innerHeight - pageInset;
+  const top = fitsBelow
+    ? triggerRect.bottom + gap
+    : Math.max(pageInset, triggerRect.top - menuRect.height - gap);
+
+  rowActionsMenu.style.left = `${left}px`;
+  rowActionsMenu.style.top = `${top}px`;
+  rowActionsMenu.querySelector('[role="menuitem"]')?.focus();
+}
+
+function handleMenuKeyboard(event) {
+  const items = [...event.currentTarget.querySelectorAll('[role="menuitem"]')];
+  if (!items.length) return;
+  const currentIndex = items.indexOf(document.activeElement);
+  let nextIndex = currentIndex;
+
+  if (event.key === "ArrowDown")
+    nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+  else if (event.key === "ArrowUp")
+    nextIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+  else if (event.key === "Home") nextIndex = 0;
+  else if (event.key === "End") nextIndex = items.length - 1;
+  else return;
+
+  event.preventDefault();
+  items[nextIndex].focus();
+}
 
 function setPopoverState(trigger, panel, open) {
   panel.hidden = !open;
@@ -2323,32 +2407,64 @@ filtersToggle.addEventListener("click", () => {
   const open = filtersPopover.hidden;
   setPopoverState(filtersToggle, filtersPopover, open);
   setPopoverState(actionsMenuToggle, actionsMenu, false);
+  if (open) statusFilter.focus();
 });
-document.querySelector("#filters-close").addEventListener("click", () =>
-  setPopoverState(filtersToggle, filtersPopover, false),
-);
+document.querySelector("#filters-close").addEventListener("click", () => {
+  setPopoverState(filtersToggle, filtersPopover, false);
+  filtersToggle.focus();
+});
 actionsMenuToggle.addEventListener("click", () => {
   const open = actionsMenu.hidden;
   setPopoverState(actionsMenuToggle, actionsMenu, open);
   setPopoverState(filtersToggle, filtersPopover, false);
+  if (open) actionsMenu.querySelector('[role="menuitem"]')?.focus();
 });
 actionsMenu.addEventListener("click", (event) => {
-  if (event.target.closest("button"))
+  if (event.target.closest('[role="menuitem"]')) {
     setPopoverState(actionsMenuToggle, actionsMenu, false);
+    actionsMenuToggle.focus();
+  }
 });
+actionsMenu.addEventListener("keydown", handleMenuKeyboard);
 document.addEventListener("click", (event) => {
-  if (!filtersPopover.contains(event.target) && !filtersToggle.contains(event.target))
+  if (
+    !filtersPopover.contains(event.target) &&
+    !filtersToggle.contains(event.target)
+  )
     setPopoverState(filtersToggle, filtersPopover, false);
-  if (!actionsMenu.contains(event.target) && !actionsMenuToggle.contains(event.target))
+  if (
+    !actionsMenu.contains(event.target) &&
+    !actionsMenuToggle.contains(event.target)
+  )
     setPopoverState(actionsMenuToggle, actionsMenu, false);
+  if (
+    !rowActionsMenu.contains(event.target) &&
+    !event.target.closest("[data-row-menu]")
+  )
+    closeRowActionsMenu();
 });
 document.addEventListener("keydown", (event) => {
   if (event.key !== "Escape") return;
+  const rowMenuWasOpen = !rowActionsMenu.hidden;
+  const filtersWereOpen = !filtersPopover.hidden;
+  const actionsWereOpen = !actionsMenu.hidden;
   setPopoverState(filtersToggle, filtersPopover, false);
   setPopoverState(actionsMenuToggle, actionsMenu, false);
   setStayRangePopover(false);
   setListRangePopover(false);
+  closeRowActionsMenu({ restoreFocus: rowMenuWasOpen });
+  if (!rowMenuWasOpen && filtersWereOpen) filtersToggle.focus();
+  else if (!rowMenuWasOpen && actionsWereOpen) actionsMenuToggle.focus();
 });
+rowActionsMenu.addEventListener("click", (event) => {
+  const option = event.target.closest("[data-row-option]");
+  if (!option) return;
+  event.preventDefault();
+  closeRowActionsMenu({ restoreFocus: true });
+});
+rowActionsMenu.addEventListener("keydown", handleMenuKeyboard);
+window.addEventListener("resize", closeRowActionsMenu);
+document.addEventListener("scroll", closeRowActionsMenu, true);
 document
   .querySelectorAll("[data-stat-filter]")
   .forEach((card) =>
@@ -2361,7 +2477,8 @@ stayRangeToggle.addEventListener("click", () => {
   if (open) {
     const form = document.querySelector("#reservation-form");
     const arrival = form.elements.arrival.value;
-    pendingStayStart = arrival && !form.elements.departure.value ? arrival : null;
+    pendingStayStart =
+      arrival && !form.elements.departure.value ? arrival : null;
     if (arrival) {
       const date = new Date(`${arrival}T12:00:00`);
       stayPickerViewDate = new Date(
@@ -2504,8 +2621,7 @@ listRangePopover.addEventListener("click", (event) => {
 });
 
 document.addEventListener("click", (event) => {
-  if (!event.target.closest(".stay-range-picker"))
-    setStayRangePopover(false);
+  if (!event.target.closest(".stay-range-picker")) setStayRangePopover(false);
   if (!event.target.closest(".list-stay-range-picker"))
     setListRangePopover(false);
 });
@@ -2665,8 +2781,7 @@ document
   .querySelector("#success-view-reservation")
   .addEventListener("click", () => {
     document.querySelector("#success-modal").close();
-    if (lastCreatedReservation)
-      openReservationDetails(lastCreatedReservation);
+    if (lastCreatedReservation) openReservationDetails(lastCreatedReservation);
   });
 document
   .querySelector("#add-guest")
@@ -2695,6 +2810,12 @@ additionalGuests.addEventListener("click", (event) => {
   updateAdditionalGuests();
 });
 body.addEventListener("click", (event) => {
+  const rowMenuButton = event.target.closest("[data-row-menu]");
+  if (rowMenuButton) {
+    event.stopPropagation();
+    openRowActionsMenu(rowMenuButton);
+    return;
+  }
   const freeRoomButton = event.target.closest("[data-free-room-number]");
   if (freeRoomButton && !freeRoomButton.disabled) {
     prepareNewReservation(freeRoomButton.dataset.freeRoomNumber);
@@ -2817,12 +2938,8 @@ document
       editingReservation.paymentStatus = data.get("paymentStatus");
       editingReservation.source = data.get("source");
       editingReservation.extras = data.getAll("extras");
-      editingReservation.breakfastGuests = Number(
-        data.get("breakfastGuests"),
-      );
-      editingReservation.breakfastNights = Number(
-        data.get("breakfastNights"),
-      );
+      editingReservation.breakfastGuests = Number(data.get("breakfastGuests"));
+      editingReservation.breakfastNights = Number(data.get("breakfastNights"));
       editingReservation.note = data.get("notes").trim();
       editingReservation = null;
       setReservationFormMode(null);
@@ -2832,13 +2949,13 @@ document
       showToast("Zmiany w rezerwacji zostały zapisane");
       return;
     }
-    const selectedRoom = rooms.find(
-      (room) => room.number === data.get("room"),
-    );
+    const selectedRoom = rooms.find((room) => room.number === data.get("room"));
     const nextReservationNumber =
       Math.max(
         ...reservations
-          .map((reservation) => Number(String(reservation.id).replace(/\D/g, "")))
+          .map((reservation) =>
+            Number(String(reservation.id).replace(/\D/g, "")),
+          )
           .filter(Number.isFinite),
       ) + 1;
     lastCreatedReservation = {
