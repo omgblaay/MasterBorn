@@ -3826,7 +3826,7 @@ button.secondary {
 }
 
 .success-modal {
-  width: min(320px, calc(100vw - 32px));
+  width: min(560px, calc(100vw - 32px));
 }
 
 .success-content {
