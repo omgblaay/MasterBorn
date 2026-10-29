@@ -51,7 +51,7 @@
 
       header {
         padding-bottom: 64px;
-        border-bottom: 1px solid var(--line);
+        /* border-bottom: 1px solid var(--line); */
       }
 
       h1,
@@ -143,7 +143,7 @@
       }
 
       section {
-        margin-top: 88px;
+        margin-top: 64px;
         scroll-margin-top: 32px;
       }
       .section-heading {
@@ -285,6 +285,52 @@
         line-height: 1.62;
       }
 
+      .problem-groups {
+        display: grid;
+        gap: 48px;
+      }
+
+      .problem-group h3 {
+        margin-bottom: 14px;
+        font-size: 1rem;
+        letter-spacing: -0.01em;
+      }
+
+      .problem-list {
+        margin: 0;
+        padding: 0;
+        border-top: 1px solid var(--line);
+        list-style: none;
+        counter-reset: problem;
+      }
+
+      .problem-list li {
+        counter-increment: problem;
+        position: relative;
+        display: block;
+        min-width: 0;
+        padding: 15px 0 15px 48px;
+        border-bottom: 1px solid var(--line);
+        color: #3f3f43;
+        line-height: 1.58;
+        overflow-wrap: anywhere;
+      }
+
+      .problem-list li::before {
+        content: counter(problem, decimal-leading-zero);
+        position: absolute;
+        top: 17px;
+        left: 0;
+        color: var(--subtle);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.7rem;
+      }
+
+      .problem-list strong {
+        color: var(--ink);
+        font-weight: 600;
+      }
+
       .trace {
         display: grid;
         gap: 48px;
@@ -320,7 +366,7 @@
       .process-video figcaption {
         display: grid;
         gap: 4px;
-        margin-top: 12px;
+        margin: 12px;
       }
 
       .process-video figcaption strong {
@@ -446,6 +492,26 @@
           scroll-behavior: auto;
         }
       }
+      figure {
+        border: 1px solid #d6d6d8;
+        border-radius: 20px;
+        padding: 4px;
+        margin: 8px;
+        position: relative;
+        /* z-index: 3;  <- remove this */
+        background: rgb(248, 248, 248);
+      }
+
+      figure::before {
+        content: "";
+        background: red;
+        border-radius: 24px;
+        display: block;
+        position: absolute;
+        inset: -5px; /* -4px plus 1px for the figure's border */
+        z-index: -1;
+        border: 1px solid blue;
+      }
     </style>
   </head>
   <body>
@@ -453,9 +519,10 @@
       <header>
         <h1>Jak powstał nowy widok rezerwacji</h1>
         <p class="intro">
-          Proces przebudowy hotelowego systemu zarządzania: od diagnozy
-          niejednoznacznej dostępności pokoju, przez decyzje projektowe, aż po
-          działający prototyp zbudowany bez backendu.
+          Projekt skoncentrowałem na trzech kluczowych zadaniach recepcji:
+          szybkim znalezieniu pokoju dostępnego przez cały planowany pobyt,
+          natychmiastowym <b>odczycie obłożenia</b> oraz sprawnym
+          <b>dodawaniu i edycji rezerwacji.</b>
         </p>
         <div class="byline" aria-label="Informacje o projekcie">
           <span>MasterBorn</span><span>Krystian Błaszczyk</span
@@ -474,9 +541,21 @@
           </svg>
         </a>
       </header>
-
+      <figure class="process-video">
+        <!-- <figcaption>
+          <strong>Dashboard rezerwacji</strong>
+          <span
+            >Widok podsumowania hotelu, statystyk, filtrów i tabeli bieżących
+            rezerwacji.</span
+          >
+        </figcaption> -->
+        <video controls preload="metadata" playsinline autoplay muted loop>
+          <source src="vid2.mp4" type="video/mp4" />
+          Twoja przeglądarka nie obsługuje odtwarzania wideo.
+        </video>
+      </figure>
       <section aria-labelledby="flow-title">
-        <div class="section-heading">
+        <div class="section-heading" style="margin-top: 20px">
           <h2 id="flow-title">Cały proces</h2>
           <p>
             Te same trzy etapy porządkowały pracę nad projektem. Środkowa pętla
@@ -585,6 +664,9 @@
             <p>
               Rozdzielić widoki rezerwacji od dostępności pokoju, dodać jasne
               statusy i pokazywać aktywne filtry bezpośrednio pod wyszukiwarką.
+              Pokoje wymagające sprzątania lub naprawy traktować jako stan
+              zasobu, a nie rezerwacji, i docelowo obsługiwać je w zakładce
+              „Pokoje”.
             </p>
           </li>
           <li>
@@ -595,6 +677,110 @@
             </p>
           </li>
         </ul>
+      </section>
+
+      <section aria-labelledby="problems-title">
+        <div class="section-heading">
+          <h2 id="problems-title">Lista problemów</h2>
+          <p>
+            Audyt starego widoku ujawnił problemy wykraczające poza samą
+            estetykę. Największe ryzyko dotyczyło niejednoznacznej dostępności
+            pokoju oraz mieszania obiektów o różnych funkcjach w jednej tabeli.
+          </p>
+        </div>
+
+        <div class="problem-groups">
+          <article class="problem-group">
+            <h3>Model informacji i status pokoju</h3>
+            <ol class="problem-list">
+              <li>Brakuje szczegółowych informacji o rodzaju pokoju.</li>
+              <li>
+                Brakuje informacji o przyszłych rezerwacjach, gdy pokój jest
+                obecnie wolny.
+              </li>
+              <li>
+                Stany pokoju, takie jak sprzątanie lub naprawa, powinny zostać
+                przeniesione do zakładki „Pokoje”, ale nadal pojawiać się ze
+                statusem po włączeniu opcji „Pokaż wolne”.
+              </li>
+              <li>
+                <strong>Pomieszane obiekty:</strong> zakładka „Rezerwacje”
+                pokazuje również wolne pokoje i pokoje w naprawie, a edycja
+                rezerwacji pozwala zmieniać parametry pokoju.
+              </li>
+              <li>
+                <strong>Niejasna dostępność:</strong> status „Wolny” nie
+                wyjaśnia, czy pokój jest gotowy do zameldowania i dostępny przez
+                cały planowany pobyt. Brakuje czytelnego kontekstu dat.
+              </li>
+              <li>
+                <strong>Brak podsumowania obłożenia:</strong> recepcjonista musi
+                sam liczyć pokoje wolne, zajęte i wyłączone z użytku.
+              </li>
+              <li>
+                <strong>Informacje operacyjne są ukryte w danych:</strong>
+                „Nowak (wyjazd)” w nazwisku i „Do 14:00” w uwagach wymagają
+                interpretacji zamiast jednoznacznie pokazywać etap pobytu lub
+                gotowość pokoju.
+              </li>
+            </ol>
+          </article>
+
+          <article class="problem-group">
+            <h3>Przepływ rezerwacji</h3>
+            <ol class="problem-list">
+              <li>
+                Brakuje możliwości dodania opcjonalnych usług i udogodnień,
+                takich jak śniadanie lub parking.
+              </li>
+              <li>Brakuje opcji dodania dodatkowych osób do pokoju.</li>
+              <li>Brakuje archiwum rezerwacji.</li>
+              <li>Brakuje natywnego kalendarza dla pól daty „Od” i „Do”.</li>
+            </ol>
+          </article>
+
+          <article class="problem-group">
+            <h3>Tabela, filtrowanie i nawigacja</h3>
+            <ol class="problem-list">
+              <li>
+                Przyciski, w tym „Nowa rezerwacja”, wydają się odłączone od
+                tabeli przez umieszczenie ich nad linią oddzielającą sekcje.
+              </li>
+              <li>Legenda i paginacja powinny zamienić się miejscami.</li>
+              <li>Przycisk „Następna” w paginacji jest słabo widoczny.</li>
+              <li>
+                Odstępy pomiędzy opcjami „Wolne”, „Zajęte” i „Inne” są
+                niespójne.
+              </li>
+              <li>
+                <strong>Nieczytelne filtrowanie:</strong> nieopisany dropdown,
+                ogólne „Inne” i pola „Od–Do” nie wyjaśniają, czego dotyczą.
+                Brakuje jasnego wyboru liczby gości.
+              </li>
+              <li>
+                Drobny tekst, słaby kontrast filtrów, szeroka tabela pełna
+                danych kontaktowych i niejasne akcje „R/E/U” spowalniają
+                skanowanie.
+              </li>
+            </ol>
+          </article>
+
+          <article class="problem-group">
+            <h3>Dostępność i warstwa wizualna</h3>
+            <ol class="problem-list">
+              <li>Kontrast części tekstów jest zbyt niski.</li>
+              <li>
+                Brakuje ikon przy akcjach „Drukuj”, „Excel”, „PDF” i „Odśwież”.
+              </li>
+              <li>Brakuje ikony rozwinięcia przy wyborze piętra.</li>
+              <li>
+                <strong>Problem głównie estetyczny:</strong> przestarzały wygląd
+                przycisków, mieszane style ikon i ciężkie obramowania nie
+                blokują zadania, ale obniżają czytelność i spójność produktu.
+              </li>
+            </ol>
+          </article>
+        </div>
       </section>
 
       <section aria-labelledby="trace-title">
@@ -638,24 +824,9 @@
           </article>
 
           <article class="trace-block">
-            <h3>Nagrania procesu</h3>
             <div class="process-videos">
               <figure class="process-video">
-                <video controls preload="metadata" playsinline>
-                  <source src="vid2.mp4" type="video/mp4" />
-                  Twoja przeglądarka nie obsługuje odtwarzania wideo.
-                </video>
-                <figcaption>
-                  <strong>Dashboard rezerwacji</strong>
-                  <span
-                    >Widok podsumowania hotelu, statystyk, filtrów i tabeli
-                    bieżących rezerwacji.</span
-                  >
-                </figcaption>
-              </figure>
-
-              <figure class="process-video">
-                <video controls preload="metadata" playsinline>
+                <video preload="metadata" playsinline autoplay muted loop>
                   <source src="vid3.mp4" type="video/mp4" />
                   Twoja przeglądarka nie obsługuje odtwarzania wideo.
                 </video>
