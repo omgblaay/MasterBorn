@@ -4408,7 +4408,7 @@ button.secondary {
   .modal-close,
   .pagination button,
   .page-size-control select,
-  .calendar-accordion) {
+) {
   box-shadow: var(--shadow-interactive);
   transition: border-color .16s ease, background .16s ease, box-shadow .16s ease, transform .16s ease;
 }
@@ -4432,7 +4432,7 @@ button.secondary {
   .modal-close,
   .pagination button,
   .page-size-control select,
-  .calendar-accordion summary):hover:not(:disabled) {
+):hover:not(:disabled) {
   box-shadow: var(--shadow-interactive-hover);
   transform: translateY(-1px);
 }
