@@ -1,5 +1,27 @@
 const reservations = [
   {
+    room: "102",
+    type: "1 os.",
+    guest: "Andrzej Dudek",
+    companions: [],
+    id: "#62761",
+    note: "",
+    status: "W hotelu",
+    arrival: "28.10.2026",
+    departure: "30.10.2026",
+    departureNote: "jutro",
+    nights: 2,
+    price: "390 zł",
+    total: "780 zł",
+    payment: "Karta",
+    paymentStatus: "Opłacona",
+    source: "Bezpośrednio",
+    roomState: "occupied",
+    period: "current",
+    action: "Szczegóły",
+    mine: true,
+  },
+  {
     room: "103",
     type: "2 os.",
     guest: "Michał Nowak",
@@ -7,10 +29,10 @@ const reservations = [
     id: "#62768",
     note: "Śniadanie 7:30, parking A5",
     status: "Oczekujące",
-    arrival: "2.11.2026",
+    arrival: "29.10.2026",
     arrivalNote: "Dzisiaj",
-    departure: "22.05.2026",
-    departureNote: "za 4 dni",
+    departure: "01.11.2026",
+    departureNote: "za 3 dni",
     nights: 3,
     price: "500 zł",
     total: "1 500 zł",
@@ -28,8 +50,9 @@ const reservations = [
     id: "#62796",
     note: "",
     status: "W hotelu",
-    arrival: "10.07.2026",
-    departure: "01.06.2026",
+    arrival: "27.10.2026",
+    departure: "29.10.2026",
+    departureNote: "Dzisiaj",
     nights: 2,
     price: "550 zł",
     total: "1 100 zł",
@@ -47,11 +70,12 @@ const reservations = [
     id: "#62797",
     note: "Do 14:00",
     status: "W hotelu",
-    arrival: "05.08.2026",
-    departure: "15.07.2026",
+    arrival: "24.10.2026",
+    departure: "29.10.2026",
+    departureNote: "Dzisiaj",
     nights: 5,
     price: "1 100 zł",
-    total: "1 350 zł",
+    total: "5 500 zł",
     payment: "Gotówka",
     roomState: "occupied",
     period: "current",
@@ -83,11 +107,12 @@ const reservations = [
     id: "#62789",
     note: "",
     status: "W hotelu",
-    arrival: "30.10.2026",
-    departure: "20.09.2026",
+    arrival: "23.10.2026",
+    departure: "29.10.2026",
+    departureNote: "Dzisiaj",
     nights: 6,
     price: "250 zł",
-    total: "1 600 zł",
+    total: "1 500 zł",
     payment: "Przelew",
     roomState: "occupied",
     period: "current",
@@ -120,7 +145,7 @@ const reservations = [
     note: "",
     status: "Oczekujące",
     arrival: "18.12.2026",
-    departure: "05.11.2026",
+    departure: "20.12.2026",
     nights: 2,
     price: "550 zł",
     total: "1 100 zł",
@@ -139,10 +164,10 @@ const reservations = [
     note: "Śniadanie 7:30, parking A5",
     status: "Anulowano",
     arrival: "22.01.2027",
-    departure: "10.12.2026",
+    departure: "25.01.2027",
     nights: 3,
     price: "380 zł",
-    total: "1 150 zł",
+    total: "1 140 zł",
     payment: "Przelew",
     roomState: "other",
     period: "future",
@@ -151,7 +176,171 @@ const reservations = [
   },
 ];
 
+const archivedGuests = [
+  "Anna Kowalska",
+  "Piotr Mazur",
+  "Zofia Kamińska",
+  "Jakub Król",
+  "Maria Pawlak",
+  "Adam Michalski",
+  "Natalia Szymańska",
+  "Krzysztof Woźniak",
+  "Agnieszka Dąbrowska",
+  "Marek Jankowski",
+  "Joanna Krawczyk",
+  "Łukasz Piotrowski",
+  "Karolina Grabowska",
+  "Tomasz Zając",
+  "Magdalena Pawłowska",
+  "Paweł Nowicki",
+  "Monika Czarnecka",
+  "Robert Lis",
+  "Aleksandra Baran",
+  "Michał Górski",
+];
+
+const archivedStays = [
+  ["08.01.2026", "11.01.2026", 3],
+  ["19.01.2026", "21.01.2026", 2],
+  ["03.02.2026", "07.02.2026", 4],
+  ["14.02.2026", "16.02.2026", 2],
+  ["26.02.2026", "01.03.2026", 3],
+  ["09.03.2026", "13.03.2026", 4],
+  ["21.03.2026", "23.03.2026", 2],
+  ["02.04.2026", "06.04.2026", 4],
+  ["17.04.2026", "20.04.2026", 3],
+  ["29.04.2026", "02.05.2026", 3],
+  ["10.05.2026", "15.05.2026", 5],
+  ["24.05.2026", "27.05.2026", 3],
+  ["06.06.2026", "08.06.2026", 2],
+  ["18.06.2026", "22.06.2026", 4],
+  ["03.07.2026", "07.07.2026", 4],
+  ["19.07.2026", "22.07.2026", 3],
+  ["05.08.2026", "09.08.2026", 4],
+  ["21.08.2026", "24.08.2026", 3],
+  ["08.09.2026", "10.09.2026", 2],
+  ["26.09.2026", "30.09.2026", 4],
+];
+
+const archivedRoomNumbers = [
+  "101",
+  "102",
+  "103",
+  "104",
+  "105",
+  "106",
+  "107",
+  "108",
+  "109",
+  "110",
+  "111",
+  "112",
+  "201",
+  "202",
+];
+const archivedStatuses = ["Zakończona", "Zakończona", "Zakończona", "Anulowano", "Nie przyjechano"];
+const archivedPayments = ["Karta", "Przelew", "Gotówka"];
+const archivedSources = ["Bezpośrednio", "Booking.com", "Telefon"];
+
+reservations.push(
+  ...archivedStays.map(([arrival, departure, nights], index) => {
+    const nightlyRate = 390 + (index % 6) * 90;
+    const companion = index % 3 === 0 ? [`Gość ${index + 1}`] : [];
+    return {
+      room: archivedRoomNumbers[index % archivedRoomNumbers.length],
+      type: index % 7 === 0 ? "Apartament" : "2 os.",
+      guest: archivedGuests[index],
+      companions: companion,
+      id: `#${62100 + index}`,
+      note: index % 4 === 0 ? "Śniadanie" : index % 5 === 0 ? "Parking" : "",
+      status: archivedStatuses[index % archivedStatuses.length],
+      arrival,
+      departure,
+      nights,
+      price: `${nightlyRate.toLocaleString("pl-PL")} zł`,
+      total: `${(nightlyRate * nights).toLocaleString("pl-PL")} zł`,
+      payment: archivedPayments[index % archivedPayments.length],
+      paymentStatus: index % 5 === 3 ? "Nieopłacona" : "Opłacona",
+      source: archivedSources[index % archivedSources.length],
+      roomState: "occupied",
+      period: "archive",
+      action: "Szczegóły",
+      mine: index % 2 === 0,
+    };
+  }),
+);
+
+const futureGuests = [
+  "Julia Wróbel",
+  "Mateusz Sikora",
+  "Oliwia Rutkowska",
+  "Filip Ostrowski",
+  "Weronika Tomaszewska",
+  "Szymon Zalewski",
+  "Amelia Marciniak",
+  "Wiktor Jabłoński",
+  "Lena Sobczak",
+  "Kamil Malinowski",
+];
+
+const futureStays = [
+  ["03.11.2026", "06.11.2026", 3],
+  ["08.11.2026", "10.11.2026", 2],
+  ["14.11.2026", "18.11.2026", 4],
+  ["21.11.2026", "24.11.2026", 3],
+  ["29.11.2026", "02.12.2026", 3],
+  ["05.12.2026", "09.12.2026", 4],
+  ["12.12.2026", "14.12.2026", 2],
+  ["27.12.2026", "30.12.2026", 3],
+  ["04.01.2027", "08.01.2027", 4],
+  ["15.01.2027", "18.01.2027", 3],
+];
+
+reservations.push(
+  ...futureStays.map(([arrival, departure, nights], index) => {
+    const nightlyRate = 450 + (index % 5) * 110;
+    const companionCount = index % 4 === 0 ? 2 : index % 2;
+    return {
+      room: archivedRoomNumbers[(index + 3) % archivedRoomNumbers.length],
+      type: companionCount === 2 ? "3 os." : "2 os.",
+      guest: futureGuests[index],
+      companions: Array.from(
+        { length: companionCount },
+        (_, companionIndex) => `Gość dodatkowy ${companionIndex + 1}`,
+      ),
+      id: `#${62810 + index}`,
+      note:
+        index % 4 === 0
+          ? "Śniadanie"
+          : index % 3 === 0
+            ? "Późne zameldowanie"
+            : "",
+      status: "Oczekujące",
+      arrival,
+      departure,
+      nights,
+      price: `${nightlyRate.toLocaleString("pl-PL")} zł`,
+      total: `${(nightlyRate * nights).toLocaleString("pl-PL")} zł`,
+      payment: archivedPayments[(index + 1) % archivedPayments.length],
+      paymentStatus: index % 3 === 0 ? "Opłacona" : "Nieopłacona",
+      source: archivedSources[(index + 2) % archivedSources.length],
+      roomState: "occupied",
+      period: "future",
+      action: "Szczegóły",
+      mine: index % 2 === 0,
+    };
+  }),
+);
+
 const reservationGuestData = {
+  "#62761": {
+    firstName: "Andrzej",
+    lastName: "Dudek",
+    location: "Katowice, Polska",
+    phone: "+48 507 111 204",
+    email: "andrzej.dudek@example.com",
+    birthDate: "1987-04-12",
+  },
   "#62768": {
     firstName: "Michał",
     lastName: "Nowak",
@@ -316,7 +505,7 @@ const rooms = [
     price: "620 zł",
     state: "free",
     status: "Wolny",
-    reservedFrom: "12.11.2026",
+    reservedFrom: "04.11.2026",
   },
   {
     number: "201",
@@ -621,6 +810,7 @@ const successLottieData = {
 const statusMeta = {
   Oczekujące: ["status-pending", "assets/clock.svg"],
   "W hotelu": ["status-staying", "assets/stay.svg"],
+  Zakończona: ["status-completed", "assets/check.svg"],
   Anulowano: ["status-cancelled", "assets/calendar-x.svg"],
   "Nie przyjechano": ["status-missed", "assets/alert.svg"],
   Wolne: ["status-free", ""],
@@ -644,6 +834,10 @@ const roomAmenityFilters = document.querySelectorAll(
   ".room-amenity-filters input",
 );
 const tableCard = document.querySelector(".table-card");
+const tableListTitle = document.querySelector("#table-list-title");
+const reservationsTable = document.querySelector("#reservations-table");
+const reservationsColgroup = document.querySelector("#reservations-colgroup");
+const reservationsHead = document.querySelector("#reservations-head");
 const pageSizeSelect = document.querySelector("#page-size");
 const paginationSummary = document.querySelector("#pagination-summary");
 const paginationPages = document.querySelector("#pagination-pages");
@@ -651,6 +845,28 @@ const pagePrev = document.querySelector("#page-prev");
 const pageNext = document.querySelector("#page-next");
 const reservationPage = document.querySelector("#new-reservation-page");
 const dashboardViews = document.querySelectorAll(".dashboard-view");
+const breakfastExtra = document.querySelector("#breakfast-extra");
+const breakfastConfig = document.querySelector("#breakfast-config");
+const breakfastGuestsInput = document.querySelector("#breakfast-guests");
+const breakfastNightsInput = document.querySelector("#breakfast-nights");
+const plannedGuestsSelect = document.querySelector("#planned-guests");
+const stayRangeToggle = document.querySelector("#stay-range-toggle");
+const stayRangePopover = document.querySelector("#stay-range-popover");
+const stayRangeDaysPrimary = document.querySelector(
+  "#stay-range-days-primary",
+);
+const stayRangeDaysSecondary = document.querySelector(
+  "#stay-range-days-secondary",
+);
+const listDateRangeFilter = document.querySelector("#list-date-range-filter");
+const listRangeToggle = document.querySelector("#list-range-toggle");
+const listRangePopover = document.querySelector("#list-range-popover");
+const listRangeDaysPrimary = document.querySelector(
+  "#list-range-days-primary",
+);
+const listRangeDaysSecondary = document.querySelector(
+  "#list-range-days-secondary",
+);
 let reservationPeriod = "current";
 let reservationView = "compact";
 let successAnimation;
@@ -661,21 +877,63 @@ let archiveOnly = false;
 let currentPage = 1;
 let pageSize = 10;
 let calendarViewDate = new Date(2026, 10, 1);
+let stayPickerViewDate = new Date(2026, 10, 1);
+let pendingStayStart = null;
+let pendingListRangeStart = null;
+const listDateRanges = {
+  future: {
+    start: "",
+    end: "",
+    flexibility: "0",
+    viewDate: new Date(2026, 9, 1),
+  },
+  archive: {
+    start: "",
+    end: "",
+    flexibility: "0",
+    viewDate: new Date(2026, 8, 1),
+  },
+};
 let manualReservationTotal = null;
+let manualNightlyRate = null;
 let latestPricingBreakdown = null;
+let lastCreatedReservation = null;
 
 function updateHotelStats() {
   const freeRooms = rooms.filter((room) => room.state === "free");
   const occupiedRooms = rooms.filter((room) => room.state === "occupied");
+  const unavailableRooms = rooms.filter((room) => room.state === "other");
   const futureReservations = freeRooms.filter(
     (room) => room.reservedFrom,
   ).length;
+  const occupancyRate = Math.round((occupiedRooms.length / rooms.length) * 100);
+  const currentReservations = reservations.filter(
+    (reservation) =>
+      reservation.period === "current" &&
+      reservation.id &&
+      reservation.status !== "Anulowano" &&
+      reservation.status !== "Nie przyjechano",
+  );
+  const currentGuests = currentReservations.reduce(
+    (total, reservation) => total + 1 + (reservation.companions?.length || 0),
+    0,
+  );
   document.querySelector("#stat-free-rooms").textContent = freeRooms.length;
   document.querySelector("#stat-total-rooms").textContent = rooms.length;
   document.querySelector("#stat-occupied-rooms").textContent =
     occupiedRooms.length;
+  document.querySelector("#stat-current-guests").textContent = currentGuests;
+  document.querySelector(".stat-card-guests small").textContent =
+    `W ${currentReservations.length} pokojach`;
   document.querySelector(".stat-card-free small").textContent =
     `${futureReservations} z przyszłą rezerwacją`;
+  document.querySelector("#stat-room-breakdown").textContent =
+    `${freeRooms.length} wolnych · ${unavailableRooms.length} poza sprzedażą`;
+  document.querySelector("#occupancy-rate").textContent = `${occupancyRate}%`;
+  document.querySelector("#occupancy-description").textContent =
+    `${occupiedRooms.length} z ${rooms.length} pokoi`;
+  document.querySelector("#occupancy-progress").style.width =
+    `${occupancyRate}%`;
 }
 
 function selectStatCard(filter) {
@@ -716,6 +974,7 @@ function applyStatFilter(filter) {
   syncSidebarSection(
     filter === "guests" || filter === "occupied" ? "current" : "",
   );
+  syncListDateRangeFilter();
   render();
 }
 
@@ -737,18 +996,22 @@ function formatPrice(value) {
 
 function updateDateDisplays() {
   const form = document.querySelector("#reservation-form");
-  ["arrival", "departure"].forEach((fieldName) => {
-    const date = new Date(`${form.elements[fieldName].value}T12:00:00`);
-    const display = document.querySelector(`#${fieldName}-date-display`);
-    display.textContent = Number.isNaN(date.getTime())
+  const formatDate = (value) => {
+    const date = new Date(`${value}T12:00:00`);
+    return Number.isNaN(date.getTime())
       ? "Wybierz datę"
       : new Intl.DateTimeFormat("pl-PL", {
-          weekday: "long",
+          weekday: "short",
           day: "numeric",
-          month: "numeric",
-          year: "numeric",
+          month: "short",
         }).format(date);
-  });
+  };
+  const arrival = form.elements.arrival.value;
+  const departure = form.elements.departure.value;
+  document.querySelector("#stay-arrival-display").textContent =
+    formatDate(arrival);
+  document.querySelector("#stay-departure-display").textContent =
+    formatDate(departure);
 }
 
 function toIsoDate(date) {
@@ -756,6 +1019,184 @@ function toIsoDate(date) {
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
+}
+
+function setStayRangePopover(open) {
+  stayRangePopover.hidden = !open;
+  stayRangeToggle.setAttribute("aria-expanded", String(open));
+  if (!open) pendingStayStart = null;
+}
+
+function renderStayRangePicker() {
+  const form = document.querySelector("#reservation-form");
+  const arrival = form.elements.arrival.value;
+  const departure = form.elements.departure.value;
+  const activeStart = pendingStayStart || arrival;
+  const activeEnd = pendingStayStart ? "" : departure;
+  const secondaryMonth = new Date(
+    stayPickerViewDate.getFullYear(),
+    stayPickerViewDate.getMonth() + 1,
+    1,
+  );
+  const monthFormatter = new Intl.DateTimeFormat("pl-PL", {
+    month: "long",
+    year: "numeric",
+  });
+
+  document.querySelector("#stay-range-month-primary").textContent =
+    monthFormatter.format(stayPickerViewDate);
+  document.querySelector("#stay-range-month-secondary").textContent =
+    monthFormatter.format(secondaryMonth);
+
+  const renderMonth = (viewDate, container) => {
+    const year = viewDate.getFullYear();
+    const month = viewDate.getMonth();
+    const firstDayOffset = (new Date(year, month, 1).getDay() + 6) % 7;
+    const gridStart = new Date(year, month, 1 - firstDayOffset);
+    const today = toIsoDate(new Date());
+
+    container.innerHTML = Array.from({ length: 42 }, (_, index) => {
+      const date = new Date(gridStart);
+      date.setDate(gridStart.getDate() + index);
+      const iso = toIsoDate(date);
+      const isOutside = date.getMonth() !== month;
+      const isPast = iso < today;
+      const classes = ["stay-range-day"];
+      if (isOutside) classes.push("is-outside");
+      if (isPast) classes.push("is-past");
+      if (activeStart && activeEnd && iso > activeStart && iso < activeEnd)
+        classes.push("is-in-range");
+      if (iso === activeStart) classes.push("is-start");
+      if (iso === activeEnd) classes.push("is-end");
+      const disabled = isOutside || (isPast && iso !== activeStart);
+      return `<button type="button" class="${classes.join(" ")}" data-stay-date="${iso}" aria-label="${new Intl.DateTimeFormat("pl-PL", { dateStyle: "long" }).format(date)}"${disabled ? " disabled" : ""}>${date.getDate()}</button>`;
+    }).join("");
+  };
+
+  renderMonth(stayPickerViewDate, stayRangeDaysPrimary);
+  renderMonth(secondaryMonth, stayRangeDaysSecondary);
+
+  document.querySelector("#stay-range-hint").textContent = pendingStayStart
+    ? "Wybierz datę wyjazdu"
+    : "Wybierz datę przyjazdu";
+
+  const flexibility = form.elements.dateFlexibility.value;
+  stayRangePopover.querySelectorAll("[data-flex-days]").forEach((button) => {
+    button.classList.toggle("selected", button.dataset.flexDays === flexibility);
+  });
+}
+
+function getListRangeSection() {
+  if (archiveOnly) return "archive";
+  return reservationPeriod === "future" ? "future" : null;
+}
+
+function getActiveListDateRange() {
+  const section = getListRangeSection();
+  return section ? listDateRanges[section] : null;
+}
+
+function formatListRangeDate(value) {
+  if (!value) return "Wybierz datę";
+  const date = new Date(`${value}T12:00:00`);
+  return new Intl.DateTimeFormat("pl-PL", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  }).format(date);
+}
+
+function updateListRangeDisplays() {
+  const range = getActiveListDateRange();
+  document.querySelector("#list-range-start-display").textContent =
+    formatListRangeDate(range?.start || "");
+  document.querySelector("#list-range-end-display").textContent =
+    formatListRangeDate(range?.end || "");
+}
+
+function setListRangePopover(open) {
+  listRangePopover.hidden = !open;
+  listRangeToggle.setAttribute("aria-expanded", String(open));
+  if (!open) pendingListRangeStart = null;
+}
+
+function syncListDateRangeFilter() {
+  const visible = Boolean(getListRangeSection());
+  listDateRangeFilter.hidden = !visible;
+  if (!visible) setListRangePopover(false);
+  updateListRangeDisplays();
+}
+
+function renderListRangePicker() {
+  const range = getActiveListDateRange();
+  if (!range) return;
+  const activeStart = pendingListRangeStart || range.start;
+  const activeEnd = pendingListRangeStart ? "" : range.end;
+  const secondaryMonth = new Date(
+    range.viewDate.getFullYear(),
+    range.viewDate.getMonth() + 1,
+    1,
+  );
+  const monthFormatter = new Intl.DateTimeFormat("pl-PL", {
+    month: "long",
+    year: "numeric",
+  });
+
+  document.querySelector("#list-range-month-primary").textContent =
+    monthFormatter.format(range.viewDate);
+  document.querySelector("#list-range-month-secondary").textContent =
+    monthFormatter.format(secondaryMonth);
+
+  const renderMonth = (viewDate, container) => {
+    const year = viewDate.getFullYear();
+    const month = viewDate.getMonth();
+    const firstDayOffset = (new Date(year, month, 1).getDay() + 6) % 7;
+    const gridStart = new Date(year, month, 1 - firstDayOffset);
+    container.innerHTML = Array.from({ length: 42 }, (_, index) => {
+      const date = new Date(gridStart);
+      date.setDate(gridStart.getDate() + index);
+      const iso = toIsoDate(date);
+      const isOutside = date.getMonth() !== month;
+      const classes = ["stay-range-day"];
+      if (isOutside) classes.push("is-outside");
+      if (activeStart && activeEnd && iso > activeStart && iso < activeEnd)
+        classes.push("is-in-range");
+      if (iso === activeStart) classes.push("is-start");
+      if (iso === activeEnd) classes.push("is-end");
+      return `<button type="button" class="${classes.join(" ")}" data-list-stay-date="${iso}" aria-label="${new Intl.DateTimeFormat("pl-PL", { dateStyle: "long" }).format(date)}"${isOutside ? " disabled" : ""}>${date.getDate()}</button>`;
+    }).join("");
+  };
+
+  renderMonth(range.viewDate, listRangeDaysPrimary);
+  renderMonth(secondaryMonth, listRangeDaysSecondary);
+  document.querySelector("#list-range-hint").textContent =
+    pendingListRangeStart
+      ? "Wybierz datę wyjazdu"
+      : "Wybierz datę przyjazdu";
+  listRangePopover
+    .querySelectorAll("[data-list-flex-days]")
+    .forEach((button) => {
+      button.classList.toggle(
+        "selected",
+        button.dataset.listFlexDays === range.flexibility,
+      );
+    });
+}
+
+function shiftIsoDate(value, days) {
+  const date = new Date(`${value}T12:00:00`);
+  date.setDate(date.getDate() + days);
+  return toIsoDate(date);
+}
+
+function applyStayRange() {
+  const form = document.querySelector("#reservation-form");
+  updateDateDisplays();
+  setSelectedRoom(form.elements.room.value);
+  if (form.elements.arrival.value) {
+    const date = new Date(`${form.elements.arrival.value}T12:00:00`);
+    calendarViewDate = new Date(date.getFullYear(), date.getMonth(), 1);
+  }
 }
 
 function formatBookingRange(start, end) {
@@ -846,6 +1287,8 @@ function setReservationFormMode(reservation = null) {
 function prepareNewReservation(roomNumber = "101") {
   const form = document.querySelector("#reservation-form");
   form.reset();
+  manualNightlyRate = null;
+  syncBreakfastConfig();
   resetAdditionalGuests();
   setReservationFormMode(null);
   setSelectedRoom(roomNumber);
@@ -857,6 +1300,7 @@ function populateReservationForm(reservation) {
   const form = document.querySelector("#reservation-form");
   const guest = getReservationGuestDetails(reservation);
   form.reset();
+  manualNightlyRate = null;
   resetAdditionalGuests();
   setReservationFormMode(reservation);
   form.elements.guestFirstName.value = guest.firstName;
@@ -864,6 +1308,7 @@ function populateReservationForm(reservation) {
   form.elements.guestLocation.value = guest.location;
   form.elements.guestPhone.value = guest.phone;
   form.elements.guestEmail.value = guest.email;
+  form.elements.guestBirthDate.value = guest.birthDate;
   form.elements.arrival.value = reservationDateToIso(reservation.arrival);
   form.elements.departure.value = reservationDateToIso(reservation.departure);
   form.elements.source.value = reservation.source || "Bezpośrednio";
@@ -883,14 +1328,26 @@ function populateReservationForm(reservation) {
   form.querySelectorAll('[name="extras"]').forEach((input) => {
     input.checked = selectedExtras.includes(input.value);
   });
-  (reservation.companions || []).forEach((name) => {
-    const parts = name.split(" ");
-    addAdditionalGuest({
-      firstName: parts.shift() || "",
-      lastName: parts.join(" "),
-      focus: false,
-    });
+  syncBreakfastConfig({
+    setDefaults: breakfastExtra.checked,
+    guests:
+      Number(reservation.breakfastGuests) ||
+      1 + (reservation.companions || []).length,
+    nights:
+      Number(reservation.breakfastNights) || Number(reservation.nights) || 1,
   });
+  const companionEntries = reservation.companionDetails?.length
+    ? reservation.companionDetails
+    : (reservation.companions || []).map((name) => {
+        const parts = name.split(" ");
+        return {
+          firstName: parts.shift() || "",
+          lastName: parts.join(" "),
+        };
+      });
+  companionEntries.forEach((companion) =>
+    addAdditionalGuest({ ...companion, focus: false }),
+  );
   setSelectedRoom(reservation.room);
   updateDateDisplays();
   calculateReservationTotal();
@@ -899,6 +1356,13 @@ function populateReservationForm(reservation) {
   document.querySelector("#night-count").value = reservation.nights;
   const editNights = Number(reservation.nights) || 0;
   const editNightlyRate = parsePrice(reservation.price);
+  const baseNightlyRate = parsePrice(
+    rooms.find((room) => room.number === reservation.room)?.price ||
+      reservation.price,
+  );
+  manualNightlyRate =
+    editNightlyRate === baseNightlyRate ? null : editNightlyRate;
+  syncNightlyRateNote(baseNightlyRate, editNightlyRate);
   const editRoomTotal = editNights * editNightlyRate;
   const editTotal = parsePrice(reservation.total);
   manualReservationTotal = null;
@@ -922,6 +1386,7 @@ function openReservationPage() {
     view.hidden = true;
   });
   reservationPage.hidden = false;
+  setStayRangePopover(false);
   const arrival = document.querySelector(
     '#reservation-form [name="arrival"]',
   ).value;
@@ -934,7 +1399,9 @@ function openReservationPage() {
 }
 
 function closeReservationPage() {
+  setStayRangePopover(false);
   reservationPage.hidden = true;
+  editingReservation = null;
   dashboardViews.forEach((view) => {
     view.hidden = false;
   });
@@ -974,6 +1441,40 @@ function renderPriceReceipt({
   document.querySelector("#receipt-total").textContent = formatPrice(total);
 }
 
+function syncBreakfastConfig({
+  setDefaults = false,
+  guests,
+  nights,
+} = {}) {
+  const checked = breakfastExtra.checked;
+  breakfastConfig.hidden = !checked;
+  breakfastConfig
+    .closest(".addon-option-group")
+    .classList.toggle("is-expanded", checked);
+  if (!checked || !setDefaults) return;
+
+  const form = document.querySelector("#reservation-form");
+  breakfastGuestsInput.value = Math.max(
+    1,
+    Number(guests) || 1 + form.querySelectorAll(".additional-guest").length,
+  );
+  breakfastNightsInput.value = Math.max(
+    1,
+    Number(nights) || Number(document.querySelector("#night-count").value) || 1,
+  );
+}
+
+const nightlyRateInput = document.querySelector("#nightly-rate");
+const nightlyRateNote = document.querySelector("#nightly-rate-note");
+
+function syncNightlyRateNote(baseRate, currentRate) {
+  const wasChanged = currentRate !== baseRate;
+  nightlyRateNote.hidden = !wasChanged;
+  nightlyRateNote.textContent = wasChanged
+    ? `Stawka została zmieniona z ${formatPrice(baseRate)} na ${formatPrice(currentRate)} za noc.`
+    : "";
+}
+
 function calculateReservationTotal() {
   const form = document.querySelector("#reservation-form");
   const arrival = new Date(`${form.elements.arrival.value}T00:00:00`);
@@ -982,7 +1483,8 @@ function calculateReservationTotal() {
   const nights = Number.isFinite(difference) && difference > 0 ? difference : 0;
   const room =
     rooms.find((item) => item.number === form.elements.room.value) || rooms[0];
-  const nightlyRate = parsePrice(room.price);
+  const baseNightlyRate = parsePrice(room.price);
+  const nightlyRate = manualNightlyRate ?? baseNightlyRate;
   const guests = 1 + form.querySelectorAll(".additional-guest").length;
   let extrasTotal = 0;
   const extraItems = [];
@@ -990,10 +1492,18 @@ function calculateReservationTotal() {
     const price = Number(extra.dataset.price);
     let extraTotal = 0;
     let detail = `${formatPrice(price)} jednorazowo`;
-    if (extra.dataset.mode === "person-night")
-      extraTotal = price * guests * nights;
-    if (extra.dataset.mode === "person-night")
-      detail = `${formatPrice(price)} × ${guests} os. × ${nights} ${nights === 1 ? "noc" : "nocy"}`;
+    if (extra.dataset.mode === "person-night") {
+      const serviceGuests =
+        extra === breakfastExtra
+          ? Math.max(1, Number(breakfastGuestsInput.value) || 1)
+          : guests;
+      const serviceNights =
+        extra === breakfastExtra
+          ? Math.max(1, Number(breakfastNightsInput.value) || 1)
+          : nights;
+      extraTotal = price * serviceGuests * serviceNights;
+      detail = `${formatPrice(price)} × ${serviceGuests} os. × ${serviceNights} ${serviceNights === 1 ? "noc" : "nocy"}`;
+    }
     if (extra.dataset.mode === "night") {
       extraTotal = price * nights;
       detail = `${formatPrice(price)} × ${nights} ${nights === 1 ? "noc" : "nocy"}`;
@@ -1014,7 +1524,8 @@ function calculateReservationTotal() {
     automaticTotal,
   };
   document.querySelector("#night-count").value = nights;
-  document.querySelector("#nightly-rate").value = formatPrice(nightlyRate);
+  nightlyRateInput.value = formatPrice(nightlyRate);
+  syncNightlyRateNote(baseNightlyRate, nightlyRate);
   document.querySelector("#reservation-total").value =
     formatPrice(automaticTotal);
   document.querySelector("#price-formula").textContent =
@@ -1023,6 +1534,30 @@ function calculateReservationTotal() {
 }
 
 const reservationTotalInput = document.querySelector("#reservation-total");
+
+function getSelectedRoomBaseRate() {
+  const form = document.querySelector("#reservation-form");
+  const room =
+    rooms.find((item) => item.number === form.elements.room.value) || rooms[0];
+  return parsePrice(room.price);
+}
+
+nightlyRateInput.addEventListener("input", () => {
+  const rawValue = nightlyRateInput.value.trim();
+  if (!rawValue) {
+    nightlyRateNote.hidden = true;
+    return;
+  }
+  syncNightlyRateNote(getSelectedRoomBaseRate(), parsePrice(rawValue));
+});
+
+nightlyRateInput.addEventListener("change", () => {
+  const baseRate = getSelectedRoomBaseRate();
+  const rawValue = nightlyRateInput.value.trim();
+  const enteredRate = rawValue ? Math.max(0, parsePrice(rawValue)) : baseRate;
+  manualNightlyRate = enteredRate === baseRate ? null : enteredRate;
+  calculateReservationTotal();
+});
 
 reservationTotalInput.addEventListener("change", () => {
   if (!latestPricingBreakdown) return;
@@ -1059,13 +1594,22 @@ function updateAdditionalGuests() {
     guest.querySelector(".additional-guest-head strong").textContent =
       `Osoba dodatkowa ${index + 1}`;
   });
+  if (plannedGuestsSelect && guests.length < 4)
+    plannedGuestsSelect.value = String(guests.length + 1);
   calculateReservationTotal();
+  const selectedRoomNumber = document.querySelector(
+    '#reservation-form [name="room"]',
+  )?.value;
+  if (selectedRoomNumber) setSelectedRoom(selectedRoomNumber);
 }
 
 function addAdditionalGuest({
   firstName = "",
   lastName = "",
+  birthDate = "",
   type = "Dorosły",
+  phone = "",
+  email = "",
   focus = true,
 } = {}) {
   additionalGuestIndex += 1;
@@ -1076,12 +1620,18 @@ function addAdditionalGuest({
     <div class="additional-guest-grid">
       <label class="field">Imię<input name="additionalGuestFirstName[]" required placeholder="Imię"></label>
       <label class="field">Nazwisko<input name="additionalGuestLastName[]" required placeholder="Nazwisko"></label>
+      <label class="field">Data urodzenia<input name="additionalGuestBirthDate[]" type="date" required></label>
       <label class="field">Typ osoby<select name="additionalGuestType[]"><option>Dorosły</option><option>Dziecko</option><option>Niemowlę</option></select></label>
+      <label class="field"><span>Telefon <small>(opcjonalnie)</small></span><input name="additionalGuestPhone[]" type="tel" placeholder="+48 XXX XXX XXX"></label>
+      <label class="field"><span>E-mail <small>(opcjonalnie)</small></span><input name="additionalGuestEmail[]" type="email" placeholder="gosc@example.com"></label>
     </div>`;
   additionalGuests.append(guest);
   guest.querySelector('[name="additionalGuestFirstName[]"]').value = firstName;
   guest.querySelector('[name="additionalGuestLastName[]"]').value = lastName;
+  guest.querySelector('[name="additionalGuestBirthDate[]"]').value = birthDate;
   guest.querySelector('[name="additionalGuestType[]"]').value = type;
+  guest.querySelector('[name="additionalGuestPhone[]"]').value = phone;
+  guest.querySelector('[name="additionalGuestEmail[]"]').value = email;
   updateAdditionalGuests();
   if (focus) guest.querySelector("input").focus();
 }
@@ -1092,10 +1642,87 @@ function resetAdditionalGuests() {
   updateAdditionalGuests();
 }
 
+function formatAvailabilityWindow(start, end) {
+  const startDate = new Date(`${start}T12:00:00`);
+  const endDate = new Date(`${end}T12:00:00`);
+  const startDay = new Intl.DateTimeFormat("pl-PL", { day: "numeric" }).format(
+    startDate,
+  );
+  const endText = new Intl.DateTimeFormat("pl-PL", {
+    day: "numeric",
+    month: "long",
+  }).format(endDate);
+  return `${startDay}–${endText}`;
+}
+
+function formatAvailabilityDate(value) {
+  const iso = reservationDateToIso(value);
+  if (!iso) return value;
+  return new Intl.DateTimeFormat("pl-PL", {
+    day: "numeric",
+    month: "long",
+  }).format(new Date(`${iso}T12:00:00`));
+}
+
+function getRoomAvailability(room) {
+  const form = document.querySelector("#reservation-form");
+  const arrival = form.elements.arrival.value;
+  const departure = form.elements.departure.value;
+  const plannedGuests = Number(form.elements.plannedGuests?.value || 1);
+  const roomCapacity = Number.parseInt(room.capacity, 10);
+  const reservedFrom = reservationDateToIso(room.reservedFrom || "");
+  const hasConflict = Boolean(
+    reservedFrom && arrival && departure && reservedFrom >= arrival && reservedFrom < departure,
+  );
+  const windowLabel =
+    arrival && departure
+      ? formatAvailabilityWindow(arrival, departure)
+      : "wybranym terminie";
+
+  if (editingReservation?.room === room.number) {
+    return {
+      available: true,
+      conflict: false,
+      message: `Przypisany do tej rezerwacji · ${windowLabel}`,
+    };
+  }
+
+  if (room.state !== "free") {
+    return {
+      available: false,
+      conflict: true,
+      message: `${room.status} · pokój niedostępny`,
+    };
+  }
+  if (roomCapacity < plannedGuests) {
+    return {
+      available: false,
+      conflict: true,
+      message: `Za mały dla ${plannedGuests} osób · wybierz większy pokój`,
+    };
+  }
+  if (hasConflict) {
+    return {
+      available: false,
+      conflict: true,
+      message: `Konflikt od ${formatAvailabilityDate(room.reservedFrom)} · niedostępny na cały pobyt`,
+    };
+  }
+  return {
+    available: true,
+    conflict: false,
+    message: room.reservedFrom
+      ? `Dostępny ${windowLabel} · kolejna rezerwacja od ${formatAvailabilityDate(room.reservedFrom)}`
+      : `Dostępny ${windowLabel} · gotowy do zameldowania`,
+  };
+}
+
 function setSelectedRoom(number) {
   const room = rooms.find((item) => item.number === String(number));
   if (!room) return;
-  document.querySelector('#reservation-form [name="room"]').value = room.number;
+  const roomInput = document.querySelector('#reservation-form [name="room"]');
+  if (roomInput.value !== room.number) manualNightlyRate = null;
+  roomInput.value = room.number;
   document.querySelector("#selected-room-number").textContent =
     `Pokój ${room.number}`;
   document.querySelector("#selected-room-type").textContent =
@@ -1104,10 +1731,11 @@ function setSelectedRoom(number) {
   document.querySelector("#selected-room-price").textContent =
     `${room.price} / noc`;
   const reservationNote = document.querySelector("#selected-room-reserved");
-  reservationNote.hidden = !room.reservedFrom;
-  reservationNote.textContent = room.reservedFrom
-    ? `Zarezerwowany od ${room.reservedFrom}`
-    : "";
+  const availability = getRoomAvailability(room);
+  reservationNote.hidden = false;
+  reservationNote.textContent = availability.message;
+  reservationNote.classList.toggle("has-conflict", availability.conflict);
+  reservationNote.classList.toggle("is-available", availability.available);
   const status = document.querySelector("#selected-room-status");
   status.textContent = room.status;
   status.className = `room-state ${roomStateClass(room.state)}`;
@@ -1120,7 +1748,8 @@ function roomOptionTemplate(room) {
   const selected =
     document.querySelector('#reservation-form [name="room"]').value ===
     room.number;
-  const selectable = room.state === "free";
+  const availability = getRoomAvailability(room);
+  const selectable = availability.available;
   const details = roomDetails[room.number];
   const nights = Number(document.querySelector("#night-count").value) || 1;
   const stayTotal = formatPrice(parsePrice(room.price) * nights);
@@ -1138,11 +1767,11 @@ function roomOptionTemplate(room) {
       </div>
       <div class="room-option-sleep">${room.beds}<span>Łazienka prywatna · pokój na wyłączność</span></div>
       <div class="room-option-amenities">${amenityTags}</div>
-
+      <div class="room-option-benefits"><span class="${availability.conflict ? "has-conflict" : ""}">${availability.message}</span></div>
     </div>
     <aside class="room-option-booking">
       <div class="room-option-price"><strong>${room.price}</strong><span>za noc</span></div>
-      <button type="button" class="${selected ? "secondary" : ""}" data-room-number="${room.number}" ${selectable ? "" : "disabled"}>${selected ? "Wybrany" : selectable ? "Wybierz pokój" : "Niedostępny"}</button>
+      <button type="button" class="${selected && selectable ? "secondary" : ""}" data-room-number="${room.number}" ${selectable ? "" : "disabled"}>${selectable ? (selected ? "Wybrany" : "Wybierz pokój") : "Niedostępny"}</button>
     </aside>
   </article>`;
 }
@@ -1175,6 +1804,7 @@ function renderRoomPicker() {
       matchesAmenities
     );
   });
+  roomResultCount.textContent = `${filtered.length} ${filtered.length === 1 ? "wynik" : filtered.length > 1 && filtered.length < 5 ? "wyniki" : "wyników"}`;
   roomList.innerHTML = filtered.length
     ? filtered.map(roomOptionTemplate).join("")
     : '<div class="room-list-empty">Nie znaleziono pokoi spełniających wybrane kryteria.</div>';
@@ -1214,6 +1844,7 @@ function getReservationGuestDetails(reservation) {
     location: reservation.location || mapped.location || "",
     phone: reservation.phone || mapped.phone || "",
     email: reservation.email || mapped.email || "",
+    birthDate: reservation.birthDate || mapped.birthDate || "",
   };
 }
 
@@ -1235,6 +1866,8 @@ function updateReservationDetailsView(reservation) {
     guest.firstName || "—";
   document.querySelector("#details-last-name").textContent =
     guest.lastName || "—";
+  document.querySelector("#details-birth-date").textContent =
+    guest.birthDate ? isoToReservationDate(guest.birthDate) : "Nie podano";
   document.querySelector("#details-location").textContent =
     guest.location || "Nie podano";
   document.querySelector("#details-phone").textContent =
@@ -1264,12 +1897,61 @@ function updateReservationDetailsView(reservation) {
   document.querySelector("#details-dates").textContent =
     `${reservation.arrival} → ${reservation.departure}`;
   document.querySelector("#details-nights").textContent = reservation.nights;
-  document.querySelector("#details-payment-nights").textContent =
-    reservation.nights;
-  document.querySelector("#details-price").textContent = reservation.price;
-  document.querySelector("#details-extras").textContent = extras.length
-    ? extras.join(", ")
-    : "Brak";
+  const nights = Number(reservation.nights) || 0;
+  const nightlyRate = parsePrice(reservation.price);
+  const roomTotal = nights * nightlyRate;
+  const nightLabel =
+    nights === 1 ? "noc" : nights > 1 && nights < 5 ? "noce" : "nocy";
+  const extraControls = [
+    ...document.querySelectorAll('#reservation-form [name="extras"]'),
+  ];
+  const guestCount = 1 + (reservation.companions?.length || 0);
+  const detailExtraItems = extras.map((extra) => {
+    const control = extraControls.find((item) => item.value === extra);
+    const price = Number(control?.dataset.price || 0);
+    const mode = control?.dataset.mode || "flat";
+    const configuredGuests =
+      Number(reservation.breakfastGuests) || guestCount;
+    const configuredNights =
+      Number(reservation.breakfastNights) || nights;
+    const total =
+      mode === "person-night"
+        ? price * configuredGuests * configuredNights
+        : mode === "night"
+          ? price * nights
+          : price;
+    const detail =
+      mode === "person-night"
+        ? `${configuredGuests} os. × ${configuredNights} nocy × ${formatPrice(price)}`
+        : mode === "night"
+          ? `${nights} ${nightLabel} × ${formatPrice(price)}`
+          : "Opłata jednorazowa";
+    return { label: extra, detail, total };
+  });
+  const automaticTotal =
+    roomTotal + detailExtraItems.reduce((sum, item) => sum + item.total, 0);
+  const reservationTotal = parsePrice(reservation.total);
+  const discount = Math.max(0, automaticTotal - reservationTotal);
+  const discountPercent = automaticTotal
+    ? (discount / automaticTotal) * 100
+    : 0;
+
+  document.querySelector("#details-stay-label").textContent =
+    `${nights} ${nightLabel} × ${formatPrice(nightlyRate)}`;
+  document.querySelector("#details-stay-total").textContent =
+    formatPrice(roomTotal);
+  document.querySelector("#details-extras-list").innerHTML = detailExtraItems
+    .map(
+      (item) =>
+        `<div><span><b>${item.label}</b><small>${item.detail}</small></span><strong>${formatPrice(item.total)}</strong></div>`,
+    )
+    .join("");
+  const detailsDiscount = document.querySelector("#details-discount");
+  detailsDiscount.hidden = discount <= 0;
+  document.querySelector("#details-discount-label").textContent =
+    `Rabat -${new Intl.NumberFormat("pl-PL", { maximumFractionDigits: 1 }).format(discountPercent)}%`;
+  document.querySelector("#details-discount-value").textContent =
+    `-${formatPrice(discount)}`;
   document.querySelector("#details-total").textContent = reservation.total;
   document.querySelector("#details-payment").textContent =
     reservation.payment || "Nieopłacona";
@@ -1286,7 +1968,47 @@ function openReservationDetails(reservation) {
   document.querySelector("#details-modal").showModal();
 }
 
+function getFreeRoomListItems() {
+  return rooms
+    .filter((room) => room.state === "free")
+    .map((room) => ({
+      room: room.number,
+      type: room.type,
+      guest: "",
+      companions: [],
+      id: "",
+      note: "",
+      status: "Wolne",
+      arrival: "",
+      departure: "",
+      nights: "",
+      price: room.price,
+      total: "",
+      payment: "",
+      source: "",
+      roomState: "free",
+      action: "Zarezerwuj",
+      isRoomOnly: true,
+    }));
+}
+
+function freeRoomRowTemplate(item) {
+  const room = rooms.find((candidate) => candidate.number === item.room);
+  const details = roomDetails[item.room];
+  const availability = getRoomAvailability(room);
+  return `<tr class="free-room-row">
+    <td><strong>${room.number}</strong><small>${room.floor}</small></td>
+    <td><strong>${room.type}</strong><small>${details.area} m²</small></td>
+    <td>${room.capacity}<small>${room.beds}</small></td>
+    <td><div class="free-room-amenities">${details.amenities.map((amenity) => `<span>${amenity}</span>`).join("")}</div></td>
+    <td><div class="free-room-availability ${availability.conflict ? "has-conflict" : ""}"><strong>${availability.available ? "Dostępny" : "Konflikt terminu"}</strong><span>${availability.message}</span></div></td>
+    <td class="amount"><strong>${room.price}</strong><small>za noc</small></td>
+    <td><button class="row-button ${availability.available ? "outlined" : ""}" data-free-room-number="${room.number}"${availability.available ? "" : " disabled"}>${availability.available ? "Zarezerwuj" : "Niedostępny"}</button></td>
+  </tr>`;
+}
+
 function rowTemplate(item) {
+  if (item.isRoomOnly) return freeRoomRowTemplate(item);
   const buttonClass =
     item.action === "Zamelduj"
       ? "dark"
@@ -1325,7 +2047,16 @@ function getFilteredReservations() {
   const status = statusFilter.value;
   const payment = paymentFilter.value;
   const source = sourceFilter.value;
-  return reservations.filter((item) => {
+  const activeDateRange = getActiveListDateRange();
+  const flexibility = Number(activeDateRange?.flexibility || 0);
+  const rangeStart = activeDateRange?.start
+    ? shiftIsoDate(activeDateRange.start, -flexibility)
+    : "";
+  const rangeEnd = activeDateRange?.end
+    ? shiftIsoDate(activeDateRange.end, flexibility)
+    : "";
+  const sourceItems = statOnlyFree ? getFreeRoomListItems() : reservations;
+  return sourceItems.filter((item) => {
     const haystack =
       `${item.room} ${item.type} ${item.guest} ${item.id} ${item.status} ${item.note}`.toLocaleLowerCase(
         "pl",
@@ -1333,7 +2064,9 @@ function getFilteredReservations() {
     const isFreeRoom = item.roomState === "free" && !item.id;
     const isReservation = Boolean(item.id);
     const isArchived =
-      item.status === "Anulowano" || item.status === "Nie przyjechano";
+      item.period === "archive" ||
+      item.status === "Anulowano" ||
+      item.status === "Nie przyjechano";
     const matchesPeriod =
       reservationPeriod === "all" || item.period === reservationPeriod;
     const matchesReservationView = archiveOnly
@@ -1349,11 +2082,21 @@ function getFilteredReservations() {
       isFreeRoom || payment === "all" || item.payment === payment;
     const matchesSource =
       isFreeRoom || source === "all" || (item.source || "Bezpośrednio") === source;
+    const itemArrival = reservationDateToIso(item.arrival);
+    const itemDeparture = reservationDateToIso(item.departure) || itemArrival;
+    const matchesDateRange =
+      isFreeRoom ||
+      !rangeStart ||
+      !rangeEnd ||
+      (Boolean(itemArrival) &&
+        itemArrival <= rangeEnd &&
+        itemDeparture >= rangeStart);
     return haystack.includes(query)
       && matchesTableScope
       && matchesStatus
       && matchesPayment
-      && matchesSource;
+      && matchesSource
+      && matchesDateRange;
   });
 }
 
@@ -1372,7 +2115,13 @@ function renderPagination(totalResults) {
 }
 
 function renderActiveFilters() {
+  const activeDateRange = getActiveListDateRange();
   const filters = [
+    activeDateRange?.start &&
+      activeDateRange?.end && {
+        key: "dateRange",
+        label: `Termin: ${formatListRangeDate(activeDateRange.start)} – ${formatListRangeDate(activeDateRange.end)}${Number(activeDateRange.flexibility) ? ` (± ${activeDateRange.flexibility} ${activeDateRange.flexibility === "1" ? "dzień" : "dni"})` : ""}`,
+      },
     statusFilter.value !== "all" && {
       key: "status",
       label: `Status: ${statusFilter.selectedOptions[0].textContent}`,
@@ -1409,14 +2158,38 @@ function renderActiveFilters() {
 
 function render() {
   const filtered = getFilteredReservations();
+  const freeRoomMode = statOnlyFree;
+  const reservationForm = document.querySelector("#reservation-form");
+  const availabilityWindow = formatAvailabilityWindow(
+    reservationForm.elements.arrival.value,
+    reservationForm.elements.departure.value,
+  );
+  tableListTitle.textContent = freeRoomMode
+    ? `Wolne pokoje · ${availabilityWindow} · ${reservationForm.elements.plannedGuests.value} os.`
+    : "Lista rezerwacji";
+  tableCard.setAttribute(
+    "aria-label",
+    freeRoomMode ? "Lista wolnych pokoi" : "Lista rezerwacji",
+  );
+  tableCard.classList.toggle("table-free-rooms", freeRoomMode);
+  reservationsColgroup.innerHTML = freeRoomMode
+    ? `<col class="free-room-number"><col class="free-room-type"><col class="free-room-capacity"><col class="free-room-equipment"><col class="free-room-availability-col"><col class="free-room-price"><col class="free-room-action">`
+    : `<col class="room"><col class="type"><col class="guest"><col class="status"><col class="arrival"><col class="stay-arrow"><col class="departure"><col class="nights"><col class="night-price"><col class="total"><col class="actions">`;
+  reservationsHead.innerHTML = freeRoomMode
+    ? `<tr><th>Pokój</th><th>Typ</th><th>Miejsca</th><th>Wyposażenie</th><th>Dostępność ${availabilityWindow}</th><th>Za noc</th><th></th></tr>`
+    : `<tr><th>Pokój</th><th>Typ</th><th>Gość</th><th>Status pobytu</th><th>Przyjazd</th><th class="stay-arrow-head" aria-label="Do"></th><th>Wyjazd</th><th>Nocy</th><th>Za noc</th><th>Łącznie</th><th></th></tr>`;
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   currentPage = Math.min(currentPage, totalPages);
   const pageStart = (currentPage - 1) * pageSize;
   const visibleRows = filtered.slice(pageStart, pageStart + pageSize);
   body.innerHTML = visibleRows.length
     ? visibleRows.map(rowTemplate).join("")
-    : `<tr><td colspan="11" class="empty-state">Nie znaleziono rezerwacji spełniających wybrane kryteria.</td></tr>`;
+    : `<tr><td colspan="${freeRoomMode ? 7 : 11}" class="empty-state">${freeRoomMode ? "Brak wolnych pokoi spełniających wybrane kryteria." : "Nie znaleziono rezerwacji spełniających wybrane kryteria."}</td></tr>`;
   tableCard.classList.toggle("table-full", reservationView === "full");
+  reservationsTable.setAttribute(
+    "aria-label",
+    freeRoomMode ? "Wolne pokoje" : "Rezerwacje",
+  );
   resultCount.textContent = `${filtered.length} ${filtered.length === 1 ? "wynik" : filtered.length > 1 && filtered.length < 5 ? "wyniki" : "wyników"}`;
   renderPagination(filtered.length);
   renderActiveFilters();
@@ -1483,26 +2256,30 @@ function exportReservationsCsv() {
 search.addEventListener("input", render);
 statusFilter.addEventListener("change", () => {
   statOnlyFree = false;
+  freeOnly.checked = false;
   selectStatCard("");
   render();
 });
 [paymentFilter, sourceFilter].forEach((control) =>
   control.addEventListener("change", () => {
     statOnlyFree = false;
+    freeOnly.checked = false;
     currentPage = 1;
     selectStatCard("");
     render();
   }),
 );
 freeOnly.addEventListener("change", () => {
-  statOnlyFree = false;
   if (archiveOnly && freeOnly.checked) {
     archiveOnly = false;
     reservationPeriod = "current";
     syncPeriodFilterButtons();
     syncSidebarSection("current");
+    syncListDateRangeFilter();
   }
-  selectStatCard("");
+  statOnlyFree = freeOnly.checked;
+  currentPage = 1;
+  selectStatCard(freeOnly.checked ? "free" : "");
   render();
 });
 
@@ -1515,6 +2292,16 @@ activeFilters.addEventListener("click", (event) => {
   if (filter === "payment") paymentFilter.value = "all";
   if (filter === "source") sourceFilter.value = "all";
   if (filter === "free") freeOnly.checked = false;
+  if (filter === "dateRange") {
+    const range = getActiveListDateRange();
+    if (range) {
+      range.start = "";
+      range.end = "";
+      range.flexibility = "0";
+      pendingListRangeStart = null;
+      updateListRangeDisplays();
+    }
+  }
 
   statOnlyFree = false;
   currentPage = 1;
@@ -1559,6 +2346,8 @@ document.addEventListener("keydown", (event) => {
   if (event.key !== "Escape") return;
   setPopoverState(filtersToggle, filtersPopover, false);
   setPopoverState(actionsMenuToggle, actionsMenu, false);
+  setStayRangePopover(false);
+  setListRangePopover(false);
 });
 document
   .querySelectorAll("[data-stat-filter]")
@@ -1567,24 +2356,171 @@ document
       applyStatFilter(card.dataset.statFilter),
     ),
   );
-document
-  .querySelectorAll('#reservation-form input[type="date"]')
-  .forEach((control) =>
-    control.addEventListener("change", () => {
-      updateDateDisplays();
-      calculateReservationTotal();
-      if (control.name === "arrival" && control.value) {
-        const date = new Date(`${control.value}T12:00:00`);
-        calendarViewDate = new Date(date.getFullYear(), date.getMonth(), 1);
-      }
-      renderReservationCalendar();
-    }),
+stayRangeToggle.addEventListener("click", () => {
+  const open = stayRangePopover.hidden;
+  if (open) {
+    const form = document.querySelector("#reservation-form");
+    const arrival = form.elements.arrival.value;
+    pendingStayStart = arrival && !form.elements.departure.value ? arrival : null;
+    if (arrival) {
+      const date = new Date(`${arrival}T12:00:00`);
+      stayPickerViewDate = new Date(
+        date.getFullYear(),
+        date.getMonth() - (date.getDate() <= 7 ? 1 : 0),
+        1,
+      );
+    }
+    renderStayRangePicker();
+  }
+  setStayRangePopover(open);
+});
+
+document.querySelector("#stay-range-prev").addEventListener("click", () => {
+  stayPickerViewDate = new Date(
+    stayPickerViewDate.getFullYear(),
+    stayPickerViewDate.getMonth() - 1,
+    1,
   );
+  renderStayRangePicker();
+});
+
+document.querySelector("#stay-range-next").addEventListener("click", () => {
+  stayPickerViewDate = new Date(
+    stayPickerViewDate.getFullYear(),
+    stayPickerViewDate.getMonth() + 1,
+    1,
+  );
+  renderStayRangePicker();
+});
+
+stayRangePopover.addEventListener("click", (event) => {
+  event.stopPropagation();
+  const flexibilityButton = event.target.closest("[data-flex-days]");
+  if (flexibilityButton) {
+    const form = document.querySelector("#reservation-form");
+    form.elements.dateFlexibility.value = flexibilityButton.dataset.flexDays;
+    renderStayRangePicker();
+    return;
+  }
+
+  const day = event.target.closest("[data-stay-date]");
+  if (!day || day.disabled) return;
+  const form = document.querySelector("#reservation-form");
+  const selectedDate = day.dataset.stayDate;
+
+  if (!pendingStayStart) {
+    pendingStayStart = selectedDate;
+    form.elements.arrival.value = selectedDate;
+    form.elements.departure.value = "";
+    renderStayRangePicker();
+    updateDateDisplays();
+    return;
+  }
+
+  if (selectedDate < pendingStayStart) {
+    pendingStayStart = selectedDate;
+    form.elements.arrival.value = selectedDate;
+    renderStayRangePicker();
+    updateDateDisplays();
+    return;
+  }
+
+  form.elements.departure.value = selectedDate;
+  pendingStayStart = null;
+  applyStayRange();
+  setStayRangePopover(false);
+});
+
+listRangeToggle.addEventListener("click", () => {
+  const open = listRangePopover.hidden;
+  if (open) renderListRangePicker();
+  setListRangePopover(open);
+});
+
+document.querySelector("#list-range-prev").addEventListener("click", () => {
+  const range = getActiveListDateRange();
+  if (!range) return;
+  range.viewDate = new Date(
+    range.viewDate.getFullYear(),
+    range.viewDate.getMonth() - 1,
+    1,
+  );
+  renderListRangePicker();
+});
+
+document.querySelector("#list-range-next").addEventListener("click", () => {
+  const range = getActiveListDateRange();
+  if (!range) return;
+  range.viewDate = new Date(
+    range.viewDate.getFullYear(),
+    range.viewDate.getMonth() + 1,
+    1,
+  );
+  renderListRangePicker();
+});
+
+listRangePopover.addEventListener("click", (event) => {
+  event.stopPropagation();
+  const range = getActiveListDateRange();
+  if (!range) return;
+
+  const flexibilityButton = event.target.closest("[data-list-flex-days]");
+  if (flexibilityButton) {
+    range.flexibility = flexibilityButton.dataset.listFlexDays;
+    currentPage = 1;
+    renderListRangePicker();
+    render();
+    return;
+  }
+
+  const day = event.target.closest("[data-list-stay-date]");
+  if (!day || day.disabled) return;
+  const selectedDate = day.dataset.listStayDate;
+
+  if (!pendingListRangeStart) {
+    pendingListRangeStart = selectedDate;
+    range.start = selectedDate;
+    range.end = "";
+    updateListRangeDisplays();
+    renderListRangePicker();
+    render();
+    return;
+  }
+
+  if (selectedDate < pendingListRangeStart) {
+    pendingListRangeStart = selectedDate;
+    range.start = selectedDate;
+    updateListRangeDisplays();
+    renderListRangePicker();
+    return;
+  }
+
+  range.end = selectedDate;
+  pendingListRangeStart = null;
+  currentPage = 1;
+  updateListRangeDisplays();
+  render();
+  setListRangePopover(false);
+});
+
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".stay-range-picker"))
+    setStayRangePopover(false);
+  if (!event.target.closest(".list-stay-range-picker"))
+    setListRangePopover(false);
+});
 document
   .querySelectorAll('#reservation-form [name="extras"]')
   .forEach((control) =>
-    control.addEventListener("change", calculateReservationTotal),
+    control.addEventListener("change", () => {
+      if (control === breakfastExtra)
+        syncBreakfastConfig({ setDefaults: breakfastExtra.checked });
+      calculateReservationTotal();
+    }),
   );
+[breakfastGuestsInput, breakfastNightsInput].forEach((control) =>
+  control.addEventListener("input", calculateReservationTotal),
+);
 document.querySelectorAll("[data-period-filter]").forEach((button) =>
   button.addEventListener("click", () => {
     document
@@ -1596,6 +2532,7 @@ document.querySelectorAll("[data-period-filter]").forEach((button) =>
     statOnlyFree = false;
     selectStatCard("");
     syncSidebarSection(reservationPeriod);
+    syncListDateRangeFilter();
     render();
   }),
 );
@@ -1612,6 +2549,7 @@ document.querySelectorAll("[data-sidebar-section]").forEach((button) =>
     selectStatCard("");
     syncPeriodFilterButtons();
     syncSidebarSection(section);
+    syncListDateRangeFilter();
     render();
   }),
 );
@@ -1724,8 +2662,32 @@ document.querySelector("#details-edit-toggle").addEventListener("click", () => {
   openReservationPage();
 });
 document
+  .querySelector("#success-view-reservation")
+  .addEventListener("click", () => {
+    document.querySelector("#success-modal").close();
+    if (lastCreatedReservation)
+      openReservationDetails(lastCreatedReservation);
+  });
+document
   .querySelector("#add-guest")
   .addEventListener("click", () => addAdditionalGuest());
+plannedGuestsSelect.addEventListener("change", () => {
+  const desiredAdditionalGuests = Number(plannedGuestsSelect.value) - 1;
+  let guests = [...additionalGuests.querySelectorAll(".additional-guest")];
+  while (guests.length < desiredAdditionalGuests) {
+    addAdditionalGuest({ focus: false });
+    guests = [...additionalGuests.querySelectorAll(".additional-guest")];
+  }
+  while (guests.length > desiredAdditionalGuests) {
+    guests.at(-1).remove();
+    guests = [...additionalGuests.querySelectorAll(".additional-guest")];
+  }
+  updateAdditionalGuests();
+  roomCapacityFilter.value = plannedGuestsSelect.value;
+  setSelectedRoom(
+    document.querySelector('#reservation-form [name="room"]').value,
+  );
+});
 additionalGuests.addEventListener("click", (event) => {
   const removeButton = event.target.closest("[data-remove-guest]");
   if (!removeButton) return;
@@ -1733,6 +2695,12 @@ additionalGuests.addEventListener("click", (event) => {
   updateAdditionalGuests();
 });
 body.addEventListener("click", (event) => {
+  const freeRoomButton = event.target.closest("[data-free-room-number]");
+  if (freeRoomButton && !freeRoomButton.disabled) {
+    prepareNewReservation(freeRoomButton.dataset.freeRoomNumber);
+    openReservationPage();
+    return;
+  }
   const actionButton = event.target.closest("[data-action]");
   if (actionButton) {
     const reservation = reservations.find(
@@ -1778,6 +2746,22 @@ document
   .addEventListener("submit", (event) => {
     event.preventDefault();
     const form = event.currentTarget;
+    if (!form.elements.arrival.value || !form.elements.departure.value) {
+      renderStayRangePicker();
+      setStayRangePopover(true);
+      stayRangeToggle.focus();
+      return;
+    }
+    if (!editingReservation) {
+      const selectedRoom = rooms.find(
+        (room) => room.number === form.elements.room.value,
+      );
+      if (!selectedRoom || !getRoomAvailability(selectedRoom).available) {
+        showToast("Wybrany pokój nie jest dostępny przez cały pobyt");
+        document.querySelector("#room-picker").showModal();
+        return;
+      }
+    }
     if (!form.checkValidity()) {
       form.reportValidity();
       return;
@@ -1786,23 +2770,36 @@ document
     const additionalCount = form.querySelectorAll(".additional-guest").length;
     const guestName =
       `${data.get("guestFirstName")} ${data.get("guestLastName")}`.trim();
+    const companionFirstNames = data.getAll("additionalGuestFirstName[]");
+    const companionLastNames = data.getAll("additionalGuestLastName[]");
+    const companionBirthDates = data.getAll("additionalGuestBirthDate[]");
+    const companionTypes = data.getAll("additionalGuestType[]");
+    const companionPhones = data.getAll("additionalGuestPhone[]");
+    const companionEmails = data.getAll("additionalGuestEmail[]");
+    const companionDetails = companionFirstNames.map((firstName, index) => ({
+      firstName: String(firstName).trim(),
+      lastName: String(companionLastNames[index] || "").trim(),
+      birthDate: companionBirthDates[index] || "",
+      type: companionTypes[index] || "Dorosły",
+      phone: String(companionPhones[index] || "").trim(),
+      email: String(companionEmails[index] || "").trim(),
+    }));
+    const companionNames = companionDetails
+      .map(({ firstName, lastName }) => `${firstName} ${lastName}`.trim())
+      .filter(Boolean);
     if (editingReservation) {
       const selectedRoom = rooms.find(
         (room) => room.number === data.get("room"),
       );
-      const companionFirstNames = data.getAll("additionalGuestFirstName[]");
-      const companionLastNames = data.getAll("additionalGuestLastName[]");
       editingReservation.firstName = data.get("guestFirstName").trim();
       editingReservation.lastName = data.get("guestLastName").trim();
       editingReservation.guest = guestName;
+      editingReservation.birthDate = data.get("guestBirthDate");
       editingReservation.location = data.get("guestLocation").trim();
       editingReservation.phone = data.get("guestPhone").trim();
       editingReservation.email = data.get("guestEmail").trim();
-      editingReservation.companions = companionFirstNames
-        .map((firstName, index) =>
-          `${firstName} ${companionLastNames[index] || ""}`.trim(),
-        )
-        .filter(Boolean);
+      editingReservation.companions = companionNames;
+      editingReservation.companionDetails = companionDetails;
       editingReservation.room = data.get("room");
       editingReservation.type = selectedRoom
         ? selectedRoom.capacity
@@ -1820,6 +2817,12 @@ document
       editingReservation.paymentStatus = data.get("paymentStatus");
       editingReservation.source = data.get("source");
       editingReservation.extras = data.getAll("extras");
+      editingReservation.breakfastGuests = Number(
+        data.get("breakfastGuests"),
+      );
+      editingReservation.breakfastNights = Number(
+        data.get("breakfastNights"),
+      );
       editingReservation.note = data.get("notes").trim();
       editingReservation = null;
       setReservationFormMode(null);
@@ -1829,6 +2832,47 @@ document
       showToast("Zmiany w rezerwacji zostały zapisane");
       return;
     }
+    const selectedRoom = rooms.find(
+      (room) => room.number === data.get("room"),
+    );
+    const nextReservationNumber =
+      Math.max(
+        ...reservations
+          .map((reservation) => Number(String(reservation.id).replace(/\D/g, "")))
+          .filter(Number.isFinite),
+      ) + 1;
+    lastCreatedReservation = {
+      firstName: data.get("guestFirstName").trim(),
+      lastName: data.get("guestLastName").trim(),
+      guest: guestName,
+      birthDate: data.get("guestBirthDate"),
+      location: data.get("guestLocation").trim(),
+      phone: data.get("guestPhone").trim(),
+      email: data.get("guestEmail").trim(),
+      companions: companionNames,
+      companionDetails,
+      id: `#${nextReservationNumber}`,
+      room: data.get("room"),
+      type: selectedRoom?.capacity || "—",
+      status: "Oczekujące",
+      arrival: isoToReservationDate(data.get("arrival")),
+      departure: isoToReservationDate(data.get("departure")),
+      nights: Number(document.querySelector("#night-count").value),
+      price: document.querySelector("#nightly-rate").value,
+      total: data.get("total"),
+      payment: data.get("paymentMethod"),
+      paymentStatus: data.get("paymentStatus"),
+      source: data.get("source"),
+      extras: data.getAll("extras"),
+      breakfastGuests: Number(data.get("breakfastGuests")),
+      breakfastNights: Number(data.get("breakfastNights")),
+      note: data.get("notes").trim(),
+      roomState: "occupied",
+      period: "current",
+      action: "Zamelduj",
+      mine: true,
+    };
+    reservations.unshift(lastCreatedReservation);
     document.querySelector("#success-guest").textContent =
       `${guestName}${additionalCount ? ` + ${additionalCount} ${additionalCount === 1 ? "osoba" : "osoby"}` : ""}`;
     document.querySelector("#success-room").textContent =
@@ -1837,17 +2881,23 @@ document
     document.querySelector("#success-payment").textContent =
       `${data.get("paymentStatus")} · ${data.get("paymentMethod")}`;
     closeReservationPage();
+    render();
+    updateHotelStats();
     document.querySelector("#success-modal").showModal();
     playSuccessAnimation();
     form.reset();
+    syncBreakfastConfig();
     resetAdditionalGuests();
     updateDateDisplays();
     setSelectedRoom("101");
   });
 
+syncListDateRangeFilter();
 render();
 renderRoomPicker();
+syncBreakfastConfig();
 calculateReservationTotal();
 updateDateDisplays();
+renderStayRangePicker();
 renderReservationCalendar();
 updateHotelStats();

@@ -24,7 +24,7 @@
           "Segoe UI",
           sans-serif;
         color: var(--ink);
-        background: var(--paper);
+        /* background: var(--paper); */
         font-size: 16px;
       }
 
@@ -55,7 +55,7 @@
         text-transform: uppercase;
       }
       h1 {
-        max-width: 900px;
+        max-width: 1200px;
         margin: 0;
         font-size: clamp(2.8rem, 6vw, 6rem);
         line-height: 0.96;
@@ -78,14 +78,11 @@
       .board {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 16px;
+        gap: 24px;
       }
       .column {
-        min-height: 540px;
-        border: 1px solid var(--line);
-        border-radius: 18px;
-        background: rgba(255, 255, 255, 0.56);
-        padding: 16px;
+        /* min-height: 540px; */
+        /* background: rgba(255, 255, 255, 0.56); */
       }
       .column h3 {
         margin: 2px 4px 16px;
@@ -98,10 +95,10 @@
         margin-bottom: 12px;
         border-radius: 3px 14px 4px 12px;
         padding: 18px;
-        box-shadow: 0 8px 20px rgba(37, 31, 37, 0.08);
+        box-shadow: 0 8px 20px rgba(37, 31, 37, 0.04);
         font-size: 0.94rem;
         line-height: 1.45;
-        transform: rotate(-0.4deg);
+        transform: rotate(-1deg);
       }
       .note:nth-of-type(even) {
         transform: rotate(0.55deg);
@@ -153,10 +150,10 @@
         gap: 18px;
       }
       .card {
-        border: 1px solid var(--line);
+        /* border: 1px solid var(--line);
         border-radius: 18px;
         background: var(--white);
-        padding: 26px;
+        padding: 26px; */
       }
       .card h3 {
         margin: 0 0 16px;
@@ -167,6 +164,7 @@
         border-left: 3px solid var(--ink);
         padding-left: 18px;
         color: #3e393e;
+        background: #fff;
         font:
           1rem/1.6 ui-monospace,
           SFMono-Regular,
@@ -247,7 +245,6 @@
       </header>
 
       <section>
-        <h2>Proces</h2>
         <div class="board">
           <article class="column observation">
             <h3>Obserwacje</h3>
