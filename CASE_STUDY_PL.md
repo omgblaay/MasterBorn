@@ -4,7 +4,7 @@
 
 ### 1. Kontekst i problem
 
-Punktem wyjścia był istniejący widok recepcyjny, w którym w jednej tabeli mieszały się rezerwacje, wolne pokoje i pokoje wyłączone z użytku. Najważniejszym problemem nie była sama estetyka, ale **niejednoznaczna dostępność pokoju** — recepcjonista nie mógł szybko potwierdzić, który pokój jest dostępny przez cały planowany pobyt.
+Punktem wyjścia był istniejący widok recepcyjny, w którym w jednej tabeli mieszały się rezerwacje, wolne pokoje i pokoje wyłączone z użytku. Najważniejszym problemem nie była sama estetyka, ale **niejednoznaczna dostępność pokoju** — recepcjonista nie mógł szybko potwierdzić, który pokój jest dostępny przez cały planowany pobyt
 
 Projekt miał być działającym prototypem bez backendu. Celem było uporządkowanie informacji, skrócenie czasu skanowania tabeli i pokazanie najważniejszych przepływów: filtrowania, wyboru pokoju, dodania rezerwacji, podglądu szczegółów oraz edycji.
 
