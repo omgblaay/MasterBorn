@@ -1740,6 +1740,7 @@ function setSelectedRoom(number) {
   document.querySelector("#selected-room-floor").textContent = room.floor;
   document.querySelector("#selected-room-price").textContent =
     `${room.price} / noc`;
+  updateRoomGallery(room.number);
   const reservationNote = document.querySelector("#selected-room-reserved");
   const availability = getRoomAvailability(room);
   reservationNote.hidden = false;
@@ -1753,6 +1754,38 @@ function setSelectedRoom(number) {
   calculateReservationTotal();
   renderReservationCalendar();
 }
+
+const roomGalleryPhotos = [
+  "assets/room-modernist.png",
+  "assets/room-modernist-bed-detail.png",
+  "assets/room-modernist-desk.png",
+  "assets/room-modernist-bathroom.png",
+];
+let roomGalleryIndex = 0;
+
+function updateRoomGallery() {
+  const image = document.querySelector("#room-gallery-image");
+  if (!image) return;
+  image.src = roomGalleryPhotos[roomGalleryIndex];
+  image.alt = `Zdjęcie ${roomGalleryIndex + 1} z 4: nowoczesny pokój hotelowy w bieli i jasnym drewnie`;
+  document.querySelector("#room-gallery-count").textContent = `${roomGalleryIndex + 1} / ${roomGalleryPhotos.length}`;
+}
+
+document.querySelector("#room-gallery-prev").addEventListener("click", (event) => {
+  event.stopPropagation();
+  roomGalleryIndex = (roomGalleryIndex - 1 + roomGalleryPhotos.length) % roomGalleryPhotos.length;
+  updateRoomGallery();
+});
+document.querySelector("#room-gallery-next").addEventListener("click", (event) => {
+  event.stopPropagation();
+  roomGalleryIndex = (roomGalleryIndex + 1) % roomGalleryPhotos.length;
+  updateRoomGallery();
+});
+document.querySelector(".room-card").addEventListener("keydown", (event) => {
+  if (event.key !== "Enter" && event.key !== " ") return;
+  event.preventDefault();
+  document.querySelector("#room-picker").showModal();
+});
 
 function roomOptionTemplate(room) {
   const selected =
@@ -2759,10 +2792,11 @@ roomList.addEventListener("click", (event) => {
 
 document
   .querySelectorAll("[data-open]")
-  .forEach((button) =>
-    button.addEventListener("click", () =>
-      document.querySelector(`#${button.dataset.open}`).showModal(),
-    ),
+  .forEach((trigger) =>
+    trigger.addEventListener("click", (event) => {
+      if (event.target.closest(".room-gallery-button")) return;
+      document.querySelector(`#${trigger.dataset.open}`).showModal();
+    }),
   );
 document.querySelectorAll("[data-open-reservation-page]").forEach((button) =>
   button.addEventListener("click", () => {

@@ -1003,14 +1003,26 @@
               >
                 <div class="calendar-room-selector">
                   <h2 class="smaller">Pokój</h2>
-                  <button
-                    type="button"
+                  <div
                     class="room-card"
                     data-open="room-picker"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Zmień wybrany pokój"
                   >
                     <!-- <span class="room-card-icon"
                       ><img src="assets/bed.svg" alt=""
                     /></span> -->
+                    <span class="room-gallery" aria-label="Zdjęcia pokoju">
+                      <img
+                        id="room-gallery-image"
+                        src="assets/room-modernist.png"
+                        alt="Nowoczesny pokój hotelowy w bieli i jasnym drewnie"
+                      />
+                      <button type="button" id="room-gallery-prev" aria-label="Poprzednie zdjęcie pokoju">‹</button>
+                      <button type="button" id="room-gallery-next" aria-label="Następne zdjęcie pokoju">›</button>
+                      <span class="room-gallery-count" id="room-gallery-count">1 / 4</span>
+                    </span>
                     <span class="room-card-copy">
                       <span class="room-card-top"
                         ><strong id="selected-room-number">Pokój 101</strong
@@ -1038,7 +1050,7 @@
                     <!-- <span class="room-card-action"
                       >Zmień <span aria-hidden="true">→</span></span
                     > -->
-                  </button>
+                  </div>
                 </div>
                 <details class="calendar-accordion">
                   <summary style="display: flex">
