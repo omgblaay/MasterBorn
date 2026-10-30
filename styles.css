@@ -4529,6 +4529,51 @@ textarea {
   caret-color: var(--color-brand-primary);
 }
 
+.process-board-fab {
+  position: fixed;
+  right: max(20px, env(safe-area-inset-right));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  z-index: 45;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 16px;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 999px;
+  background: var(--color-brand-primary);
+  box-shadow: var(--shadow-interactive-hover);
+  color: #fff;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform .16s ease, background .16s ease, box-shadow .16s ease;
+}
+
+.process-board-fab:hover {
+  transform: translateY(-2px);
+  background: #111;
+  box-shadow: 0 5px 14px rgba(30, 29, 30, .2), 0 14px 28px rgba(30, 29, 30, .12);
+}
+
+.process-board-fab svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 480px) {
+  .process-board-fab {
+    right: max(14px, env(safe-area-inset-right));
+    bottom: max(14px, env(safe-area-inset-bottom));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     scroll-behavior: auto !important;

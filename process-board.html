@@ -118,6 +118,17 @@
           transform 160ms ease;
       }
 
+      .hero-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 30px;
+      }
+
+      .hero-links .live-link {
+        margin-top: 0;
+      }
+
       .live-link:hover {
         border-color: #cfcfd2;
         background: var(--surface);
@@ -125,6 +136,29 @@
           0 2px 5px rgba(29, 29, 31, 0.06),
           0 8px 20px rgba(29, 29, 31, 0.07);
         transform: translateY(-1px);
+      }
+
+      .live-link.is-primary {
+        border-color: var(--ink);
+        background: var(--ink);
+        color: #fff;
+      }
+
+      .live-link.is-primary:hover {
+        border-color: #343438;
+        background: #343438;
+      }
+
+      .live-link.is-ghost {
+        border-color: transparent;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .live-link.is-ghost:hover {
+        border-color: var(--line);
+        background: var(--surface);
+        box-shadow: 0 2px 5px rgba(29, 29, 31, 0.06);
       }
 
       .live-link:focus-visible {
@@ -140,6 +174,11 @@
         stroke-width: 1.7;
         stroke-linecap: round;
         stroke-linejoin: round;
+      }
+
+      .live-link svg.github-icon {
+        fill: currentColor;
+        stroke: none;
       }
 
       section {
@@ -519,17 +558,18 @@
       <header>
         <h1>Jak powstał nowy widok rezerwacji</h1>
         <p class="intro">
-          Projekt skoncentrowałem na trzech kluczowych zadaniach recepcji:
-          szybkim znalezieniu pokoju dostępnego przez cały planowany pobyt,
-          natychmiastowym <b>odczycie obłożenia</b> oraz sprawnym
+          Projekt skoncentrowałem na 3 kluczowych zadaniach recepcji:
+          <b>szybkim znalezieniu pokoju</b> dostępnego przez cały planowany
+          pobyt, natychmiastowym <b>odczycie obłożenia</b> oraz sprawnym
           <b>dodawaniu i edycji rezerwacji.</b>
         </p>
         <div class="byline" aria-label="Informacje o projekcie">
           <span>MasterBorn</span><span>Krystian Błaszczyk</span
           ><span>Product design + prototype</span>
         </div>
+        <div class="hero-links" aria-label="Linki do projektu">
         <a
-          class="live-link"
+          class="live-link is-primary"
           href="https://omgblaay.github.io/MasterBorn/"
           target="_blank"
           rel="noreferrer"
@@ -541,16 +581,28 @@
           </svg>
         </a>
         <a
-          class="live-link"
+          class="live-link is-ghost"
           href="https://github.com/omgblaay/MasterBorn"
           target="_blank"
           rel="noreferrer"
-          >Github
+          >GitHub repo
+          <svg class="github-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 .297a12 12 0 0 0-3.8 23.38c.6.11.82-.26.82-.58v-2.23c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.33-1.76-1.33-1.76-1.09-.75.08-.74.08-.74 1.2.08 1.84 1.23 1.84 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.77.42-1.3.76-1.6-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.62-2.8 5.64-5.48 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.82.58A12 12 0 0 0 12 .297" />
+          </svg>
+        </a>
+        <a
+          class="live-link is-ghost"
+          href="https://krystian.design"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Portfolio
           <svg viewBox="0 0 20 20" aria-hidden="true">
             <path d="M7 5h8v8" />
             <path d="m15 5-9.5 9.5" />
           </svg>
         </a>
+        </div>
       </header>
       <figure class="process-video">
         <!-- <figcaption>
