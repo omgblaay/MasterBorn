@@ -2015,7 +2015,13 @@ function updateReservationDetailsView(reservation) {
 function openReservationDetails(reservation) {
   currentDetailsReservation = reservation;
   updateReservationDetailsView(reservation);
-  document.querySelector("#details-modal").showModal();
+  const detailsModal = document.querySelector("#details-modal");
+  // A different native dialog left in the top layer can leave its backdrop
+  // above this one. Keep only the details dialog open for this transition.
+  document.querySelectorAll("dialog[open]").forEach((dialog) => {
+    if (dialog !== detailsModal) dialog.close();
+  });
+  if (!detailsModal.open) detailsModal.showModal();
 }
 
 function getFreeRoomListItems() {

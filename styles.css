@@ -3230,12 +3230,6 @@ h3.smaller {
   stroke-linejoin: round;
 }
 
-.details-utility-button::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-}
-
 .details-header-actions .modal-close {
   flex: 0 0 auto;
   display: grid;
