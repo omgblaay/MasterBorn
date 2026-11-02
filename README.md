@@ -4,6 +4,7 @@
 
 Static implementation of the supplied Figma reservations screen. It uses plain HTML, CSS, and JavaScript with no build step or backend.
 
+prod: https://omgblaay.github.io/MasterBorn/
 
 ## Included interactions
 
